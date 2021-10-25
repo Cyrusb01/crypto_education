@@ -1,1 +1,1 @@
-# cyrpto_education
+# crypto_education
