@@ -19,4 +19,6 @@ def learning():
 
 
 if __name__ == "__main__":
+
+    
 	app.run(debug = True, passthrough_errors=True) 
