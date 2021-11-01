@@ -2,7 +2,7 @@ from flask import Flask, render_template
 app = Flask(__name__)
 
 @app.route('/')
-@app.route('/index')
+@app.route('/home')
 def index():
     return render_template('index.html')
 
@@ -14,6 +14,14 @@ def btcgold():
 @app.route('/learning')
 def learning():
     return render_template('tickerlearning.html')
+
+@app.route('/research')
+def research():
+    return render_template('research.html')
+
+@app.route('/portfolio')
+def portfolio():
+    return render_template('portfolio.html')
 
 # @app.route('/h')
 # def graph(chartID = 'chart_ID', chart_type = 'line', chart_height = 1000):
