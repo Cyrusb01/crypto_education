@@ -1,4 +1,10 @@
-from flask import Flask, render_template
+from flask import Flask, request, render_template
+import yfinance as yf
+from pandas_highcharts.core import serialize
+import json 
+import pandas as pd 
+from helpers import pandas_to_highcharts
+
 app = Flask(__name__)
 
 @app.route('/')
@@ -15,13 +21,32 @@ def btcgold():
 def learning():
     return render_template('tickerlearning.html')
 
-@app.route('/research')
+@app.route('/research', methods = ['GET', 'POST'])
 def research():
-    return render_template('research.html')
+    ticker = "BTC"
+    if request.method == 'POST':
+        ticker = request.form["ticker"]
+        print(ticker)
+    title = {"text": 'My Title'}
+    chartID = "chart_ID"
+    msft = yf.download(ticker+"-USD", start="2017-01-01", end="2021-11-01")
+    df = pd.DataFrame(msft)
+    df = df[['Close']]
+    
+    json_dict = pandas_to_highcharts(df)
+
+
+    return render_template('research.html', ticker = ticker, title = title, chartID=chartID, data = json_dict)
 
 @app.route('/portfolio')
 def portfolio():
     return render_template('portfolio.html')
+
+@app.route('/form', methods = ['GET', 'POST'])
+def form():
+    name = request.form["Name"]
+    print(name)
+    return render_template('form.html')
 
 # @app.route('/h')
 # def graph(chartID = 'chart_ID', chart_type = 'line', chart_height = 1000):
@@ -36,7 +61,24 @@ def portfolio():
 def high():
     title = {"text": 'My Title'}
     chartID = "chart_ID"
-    return render_template('highchart.html', title = title, chartID=chartID)
+    msft = yf.download("MSFT", start="2017-01-01", end="2017-01-30")
+    df = pd.DataFrame(msft)
+    df = df[['Close']]
+    
+    json_dict = pandas_to_highcharts(df)
+    
+    
+    # json_data = [{'data': list(value.values), 'name': key} for key, value in df.items()]
+    # json_data = df.to_json()
+    # print(json_dict)
+    # json_data = dict(json_data)
+    # print(type(json_data))
+    # for key in json_data["Close"].keys():
+    #     print(key)
+        # temp = [float(key), float(json_data["Close"][key])]
+        # data_list.append(temp)
+        
+    return render_template('highchart.html', title = title, chartID=chartID, data = json_dict)
 
 if __name__ == "__main__":
 
