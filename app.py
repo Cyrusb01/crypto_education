@@ -35,11 +35,25 @@ def learning():
     return render_template('tickerlearning.html')
 
 @app.route('/research', methods = ['GET', 'POST'])
+# def research():
+#     ticker = "BTC"
+#     if request.method == 'POST':
+#         ticker = request.form["ticker"]
+#         print(ticker)
+#     title = {"text": 'My Title'}
+#     chartID = "chart_ID"
+#     msft = yf.download(ticker+"-USD", start="2017-01-01", end="2021-11-01")
+#     df = pd.DataFrame(msft)
+#     df = df[['Close']]
+    
+#     json_dict = pandas_to_highcharts(df)
+
+#     return render_template('research.html', ticker = ticker, title = title, chartID=chartID, data = json_dict)
 def research():
     ticker = "BTC"
     if request.method == 'POST':
         ticker = request.form["ticker"]
-        print(ticker)
+
     title = {"text": 'My Title'}
     chartID = "chart_ID"
     msft = yf.download(ticker+"-USD", start="2017-01-01", end="2021-11-01")
@@ -48,8 +62,8 @@ def research():
     
     json_dict = pandas_to_highcharts(df)
 
-
-    return render_template('research.html', ticker = ticker, title = title, chartID=chartID, data = json_dict)
+    if request.method == 'POST': return render_template('tickerlearning.html', ticker = ticker, title = title, chartID=chartID, data = json_dict)
+    else: return render_template('research.html', ticker = ticker, title = title, chartID=chartID, data = json_dict)
 
 @app.route('/portfolio')
 def portfolio():
