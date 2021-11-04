@@ -4,12 +4,25 @@ from pandas_highcharts.core import serialize
 import json 
 import pandas as pd 
 from helpers import pandas_to_highcharts
+from newsapi import NewsApiClient
+import os 
+
 
 app = Flask(__name__)
 
 @app.route('/')
 @app.route('/home')
 def index():
+    news_api_key = os.getenv("NEWS_API_KEY")
+    print(news_api_key)
+    newsapi = NewsApiClient(api_key=news_api_key)
+    sources = newsapi.get_sources()
+    top_headlines = newsapi.get_top_headlines(q='bitcoin',
+                                        #   sources='bbc-news,the-verge',
+                                          category='business',
+                                          language='en',
+                                          country='us')
+    print(top_headlines)
     return render_template('index.html')
 
 
