@@ -18,12 +18,10 @@
 
         <title>CryptoWorld</title>
     </head>
-    <body>
-    </body>
 </html>
     <body style="height:100%; font-family: 'Trebuchet MS', sans-serif; background: var(--color-background)">
-      
-      <!-- Navbar -->
+        
+        <!-- Navbar -->
         <nav class="navbar navbar-expand navbar-light zv-nav zv-navbar-bg" style="padding-left:20px; padding-right:20px;">
         <div class="container-fluid">
             <a class="navbar-brand" href="index.html" style="color: var(--color-accent);">
@@ -51,35 +49,92 @@
                 </ul>
             </div>
         </div>
-      </nav>
+        </nav>
         
-      <!-- Navbar -->
+        <!-- Navbar -->
       
-      <!-- Body Stuff Goes Here -->
-      <div class="container-fluid centered">
-          
-          <div class="row justify-content-center">
-              <div class="col-4">
-                  <img src="../assets/landingpagegraph.jpg" width="500" height="auto" style="margin-top:20px;">
-              </div>
-              <div class="col-4">
-                  <p class="zv-h1">Research!</p>
-                  <p class="text-start zv-text">blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah </p>
-              </div>
-          </div>
+        <!-- Body Stuff Goes Here -->
+        <div class="container">
 
-          
-      </div>
-      <!-- Body Stuff Ends Here -->
-      
-      <footer class="fixed-bottom bg-light text-center text-lg-start">
+            <div class="row form-group">
+                <div class="col-md-6" id="investments">
+
+                    <h2 style="text-align: center;">Enter Your Current Investments</h2>
+
+                    <div class="row justify-content-center" style="margin-bottom: 10px;">
+                        <div class="input-group mb-3" style="width: 50%;">
+                            <input type="text" class="form-control" placeholder="BTC" aria-label="Enter Ticker"
+                                aria-describedby="button-addon2" style="margin-right: 10px">
+                            
+                            <input type="text" class="form-control" placeholder="0.0001" aria-label="Enter Ticker"
+                                aria-describedby="button-addon2">
+                        </div>
+                    </div>
+
+                    <div class="row justify-content-center" style="margin-bottom: 10px;">
+                        <div class="input-group mb-3" style="width: 50%;">
+                            <input type="text" class="form-control" placeholder="ETH" aria-label="Enter Ticker"
+                                aria-describedby="button-addon2" style="margin-right: 10px;">
+                    
+                            <input type="text" class="form-control" placeholder="0.05" aria-label="Enter Ticker"
+                                aria-describedby="button-addon2">
+                        </div>
+                    </div>
+
+                    <div class="row justify-content-center" style="margin-bottom: 10px;">
+                        <div class="input-group mb-3" style="width: 50%;">
+                            <input type="text" class="form-control" placeholder="ADA" aria-label="Enter Ticker"
+                                aria-describedby="button-addon2" style="margin-right: 10px;">
+                    
+                            <input type="text" class="form-control" placeholder="5.0" aria-label="Enter Ticker"
+                                aria-describedby="button-addon2">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-md-6">
+                    <div class="rounded-circle" id="pie"></div>
+                </div>
+            </div>
+
+            <div class="row form-group">
+                <div class="col-md-6">
+                    <div id="trends" class="card">
+                        <div class="card-body">
+                            <p>Put trend graph here</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div id="scatter" class="card">
+                        <div class="card-body">
+                            <p>Put scatter graph here</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card" id="stats">
+                        <div class="card-body">
+                            <p>Put stat chart here</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- Body Stuff Ends Here -->
+        
+        <footer class="fixed-bottom bg-light text-center text-lg-start">
         <!-- Copyright -->
         <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
-          © 2021 Copyright:
-          <a class="text-dark">CryptoEducation.com</a>
+            © 2021 Copyright:
+            <a class="text-dark">CryptoEducation.com</a>
         </div>
         <!-- Copyright -->
-      </footer>
+        </footer>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -112,4 +167,3 @@
     </script>
   </body>
 </html>
-

@@ -69,3 +69,10 @@
     color: #FFFFFF;
 }
 
+#pie {
+    margin: 0 auto;
+    color: red;
+    background-color: red;
+    height: 225px;
+    width: 225px;
+}
