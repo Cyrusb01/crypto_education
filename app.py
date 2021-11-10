@@ -65,8 +65,13 @@ def research():
     if request.method == 'POST': return render_template('tickerlearning.html', ticker = ticker, title = title, chartID=chartID, data = json_dict)
     else: return render_template('research.html', ticker = ticker, title = title, chartID=chartID, data = json_dict)
 
-@app.route('/portfolio')
+@app.route('/portfolio', methods= ['GET', 'POST'])
 def portfolio():
+    tickers = []
+    if request.method == 'POST':
+        tickers.append(request.form["add_ticker"])
+        print(tickers)
+
     return render_template('portfolio.html')
 
 @app.route('/form', methods = ['GET', 'POST'])

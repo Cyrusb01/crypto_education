@@ -60,33 +60,47 @@
                 <p class="zv-h1 text-center" id="header_cryptoTicker">Your Portfolio</p>
             </div>
 
-            <div class="row form-group">
-                <div class="col-md-6" id="investments">
+            <div class="row form-group" style="width:75%; margin:auto;">
+                <!-- <div class="col-md-6" id="investments"> -->
 
                     <p class="zv-h2" style="text-align: center;">Your Current Investments</p>
 
                     <div class="row justify-content-center" style="margin-bottom: 10px;">
                         <div class="input-group mb-3" style="width: 50%;">
-                            <input type="text" class="form-control" placeholder="BTC" aria-label="Enter Ticker"
-                                aria-describedby="button-addon2" style="margin-right: 10px">
-                            
-                            <input type="text" class="form-control" placeholder="0.0001" aria-label="Enter Ticker"
-                                aria-describedby="button-addon2">
+                            <form method="POST">
+                                <input type="text" class="form-control" placeholder="Ticker" aria-label="Enter Ticker"
+                                    aria-describedby="button-addon2" style="margin-right: 10px" id="add_ticker"/>
+                                
+                                <input type="text" class="form-control" placeholder="Quantity" aria-label="Enter Ticker"
+                                    aria-describedby="button-addon2" style="margin-right: 10px" id="add_quantity"/>
+
+                                <button class="btn btn-primary" type="button" onclick="addTicker()" id="btn_addticker">Add</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
+                    
+                    <table class="table table-sm" id="currentInvestmentsTable">
+                        <thead class="table-dark">
+                          <tr>
+                            <th scope="col">Ticker</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Current Price</th>
+                            <th scope="col"></th>
+                          </tr>
+                        </thead>
+                        <tbody id="currentInvestmentsBody">
+                          
+                        </tbody>
+                      </table>
 
-                    <div class="row justify-content-center" style="margin-bottom: 10px;">
-                        <div class="input-group mb-3" style="width: 50%;">
-                            <a href="#" class="text-center" style="margin: auto">
-                                <button class="btn btn-primary" type="button">Add</button>
-                            </a>
-                        </div>
-                    </div>
+                    
 
-                </div>
-                <div class="col-md-6">
+                <!-- </div> -->
+                <!-- <div class="col-md-6">
                     <div class="rounded-circle" id="pie"></div>
-                </div>
+                </div> -->
             </div>
 
             <div class="row form-group">
@@ -132,6 +146,25 @@
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
     <script>
+        function addTicker() {
+            const tickerValue = document.getElementById('add_ticker').value;
+            const tickerQuantity = document.getElementById('add_quantity').value;
+
+            const tbody = document.createElement('tr');
+
+            tbody.innerHTML = '<th scope="row">' + tickerValue + '</th>' +
+                    '<td>{tickerName}</td>' +
+                    '<td>' + tickerQuantity + '</td>' +
+                    '<td>{currentPrice}</td>' +
+                    '<td><input type="button" value="-" onclick="removeTicker(this)" /></td>';
+
+            document.getElementById('currentInvestmentsBody').appendChild(tbody);
+        }
+
+        function removeTicker(input) {
+            document.getElementById('currentInvestmentsBody').removeChild(input.parentNode.parentNode);
+        }
+
         function setTheme( newTheme ) {
             localStorage.setItem( 'theme', newTheme );
             document.documentElement.className = newTheme;
@@ -156,6 +189,7 @@
                 document.getElementById("themeToggle").className = "bi bi-sun";
             }
         })();
+
     </script>
   </body>
 </html>
