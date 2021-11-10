@@ -30,13 +30,13 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav centered">
                     <li class="nav-item">
-                        <a class="nav-link" href="/home" style="font-size:23px; padding-left: 20px; padding-right: 20px; color: var(--color-accent);">Home</a>
+                        <a class="nav-link" href="/home" style="font-size:23px; padding-left: 20px; padding-right: 20px;">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/research" style="font-size:23px; padding-left: 20px; padding-right: 20px;">Research</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/portfolio" style="font-size:23px; padding-left: 20px; padding-right: 20px;">Portfolio</a>
+                        <a class="nav-link" href="/portfolio" style="font-size:23px; padding-left: 20px; padding-right: 20px; color: var(--color-accent);">Portfolio</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/fun" style="font-size:23px; padding-left: 20px; padding-right: 20px;">Fun</a>
@@ -56,10 +56,14 @@
         <!-- Body Stuff Goes Here -->
         <div class="container">
 
+            <div class="row justify-content-center" style="margin-bottom: 20px;">
+                <p class="zv-h1 text-center" id="header_cryptoTicker">Your Portfolio</p>
+            </div>
+
             <div class="row form-group">
                 <div class="col-md-6" id="investments">
 
-                    <h2 style="text-align: center;">Enter Your Current Investments</h2>
+                    <p class="zv-h2" style="text-align: center;">Your Current Investments</p>
 
                     <div class="row justify-content-center" style="margin-bottom: 10px;">
                         <div class="input-group mb-3" style="width: 50%;">
@@ -73,21 +77,9 @@
 
                     <div class="row justify-content-center" style="margin-bottom: 10px;">
                         <div class="input-group mb-3" style="width: 50%;">
-                            <input type="text" class="form-control" placeholder="ETH" aria-label="Enter Ticker"
-                                aria-describedby="button-addon2" style="margin-right: 10px;">
-                    
-                            <input type="text" class="form-control" placeholder="0.05" aria-label="Enter Ticker"
-                                aria-describedby="button-addon2">
-                        </div>
-                    </div>
-
-                    <div class="row justify-content-center" style="margin-bottom: 10px;">
-                        <div class="input-group mb-3" style="width: 50%;">
-                            <input type="text" class="form-control" placeholder="ADA" aria-label="Enter Ticker"
-                                aria-describedby="button-addon2" style="margin-right: 10px;">
-                    
-                            <input type="text" class="form-control" placeholder="5.0" aria-label="Enter Ticker"
-                                aria-describedby="button-addon2">
+                            <a href="#" class="text-center" style="margin: auto">
+                                <button class="btn btn-primary" type="button">Add</button>
+                            </a>
                         </div>
                     </div>
 
