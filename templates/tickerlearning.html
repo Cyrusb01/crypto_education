@@ -71,13 +71,13 @@
         </div>
         <div class="row justify-content-center" style="margin-bottom: 20px;">
             <!--Current Crypto Ticker Header-->
-            <p class="zv-h1 text-center" id="header_cryptoTicker">{{ticker | upper}}</p>
+            <p class="zv-h1 text-center" id="header_cryptoTicker">{{coin_name | safe}}</p>  
         </div>
         <div class="row justify-content-center" style="margin-bottom:50px;">
             <!--Description of Crypto-->
             <div class="col-4">
-                <p class="zv-h1">What is {{ticker | upper}}?</p>
-                <p class="zv-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                <p class="zv-h1">What is {{coin_name | safe}}?</p>
+                <p class="zv-text"> {{ coin_description | safe }} </p>
             </div>
             <!--Price Graph of Crypto-->
             <div class="col-6">
@@ -108,27 +108,27 @@
             <div class="col-3">
                 <div class="card" style="width: 18rem; margin: auto;">
                     <div class="card-body">
-                        <h5 class="card-title">News Article Source</h5>
-                        <p class="card-text">headline of news article</p>
-                        <a href="#" class="card-link">Article Link</a>
+                        <h5 class="card-title">{{ source1 }}</h5>
+                        <p class="card-text"> {{headline1 }}</p>
+                        <a href= "{{url1}}" class="card-link"> Link to Article </a>
                     </div>
                 </div>
             </div>
             <div class="col-3">
                 <div class="card" style="width: 18rem; margin: auto;">
                     <div class="card-body">
-                        <h5 class="card-title">News Article Source</h5>
-                        <p class="card-text">headline of news article</p>
-                        <a href="#" class="card-link">Article Link</a>
+                        <h5 class="card-title">{{ source2 }}</h5>
+                        <p class="card-text"> {{headline2 }}</p>
+                        <a href= "{{url2 }}" class="card-link"> Link to Article</a>
                     </div>
                 </div>
             </div>
             <div class="col-3">
                 <div class="card" style="width: 18rem; margin: auto;">
                     <div class="card-body">
-                        <h5 class="card-title">News Article Source</h5>
-                        <p class="card-text">headline of news article</p>
-                        <a href="#" class="card-link">Article Link</a>
+                        <h5 class="card-title">{{ source3 }}</h5>
+                        <p class="card-text"> {{headline3 }}</p>
+                        <a href= "{{url3}}" class="card-link"> Link to Article</a>
                     </div>
                 </div>
             </div>
