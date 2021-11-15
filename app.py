@@ -106,16 +106,18 @@ def research():
 
 @app.route('/portfolio', methods= ['GET', 'POST'])
 def portfolio():
-    tickers = []
-    if request.method == 'POST':
-        tickers.append(request.form["add_ticker"])
-        print(tickers)
+    if request.method == 'GET':
+        ticker = request.form("add_ticker")
+        print(ticker)
 
-    return render_template('portfolio.html')
+    # Update table on page with data from "tickers" array
+    # Update graph on page with "tickers"
+    return render_template("portfolio.html")
+
 
 @app.route("/form", methods=["GET", "POST"])
 def form():
-    name = request.form["Name"]
+    name = app.form["Name"]
     print(name)
     return render_template("form.html")
 

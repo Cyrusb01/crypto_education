@@ -65,28 +65,32 @@
 
                     <p class="zv-h2" style="text-align: center;">Your Current Investments</p>
 
-                    <div class="row justify-content-center" style="margin-bottom: 10px;">
-                        <div class="input-group mb-3" style="width: 50%;">
-                            <form method="POST">
+                    
+                    <form method="POST">
+                        <div class="row justify-content-center" style="margin-bottom: 10px;">
+                            <div class="input-group mb-3" style="width: 50%;">
+                            
                                 <input type="text" class="form-control" placeholder="Ticker" aria-label="Enter Ticker"
-                                    aria-describedby="button-addon2" style="margin-right: 10px" id="add_ticker"/>
+                                    aria-describedby="button-addon2" style="margin-right: 10px" id="add_ticker" name="add_ticker"/>
                                 
                                 <input type="text" class="form-control" placeholder="Quantity" aria-label="Enter Ticker"
                                     aria-describedby="button-addon2" style="margin-right: 10px" id="add_quantity"/>
 
                                 <button class="btn btn-primary" type="button" onclick="addTicker()" id="btn_addticker">Add</button>
                                 </div>
-                            </form>
+                            
+                            </div>
                         </div>
-                    </div>
+                    </form>
+                    
                     
                     <table class="table table-sm" id="currentInvestmentsTable">
                         <thead class="table-dark">
                           <tr>
-                            <th scope="col">Ticker</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Quantity</th>
+                            <th scope="col">Currency</th>
                             <th scope="col">Current Price</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Portfolio Value</th>
                             <th scope="col"></th>
                           </tr>
                         </thead>
@@ -105,18 +109,19 @@
 
             <div class="row form-group">
                 <div class="col-md-6">
-                    <div id="trends" class="card">
-                        <div class="card-body">
-                            <p>Put trend graph here</p>
-                        </div>
-                    </div>
+                        <p class="zv-text">Current Value of Investments: $xxx.xx</p>
+                        <p class="zv-text">Growth in last year: xx%</p>
                 </div>
                 <div class="col-md-5">
-                    <div id="scatter" class="card">
-                        <div class="card-body">
-                            <p>Put scatter graph here</p>
-                        </div>
-                    </div>
+                    <div id={{ chartID|safe }} class="chart" ></div>
+                    <script type = "text/javascript">
+                        var chart_id = {{ chartID|safe }}
+                        var title = {{ title|safe }}
+                        var data = {{ data|safe }}
+                    </script>
+                    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+                    <script src="https://code.highcharts.com/stock/highstock.js"></script> 
+                    <script src="../static/js/main.js"></script>
                 </div>
             </div>
 
@@ -147,15 +152,26 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
     <script>
         function addTicker() {
+            //$.getJSON('/updatePortfolioData', function(data) {});
+
+            $.ajax({
+                url: "/portfolio",
+                type: "GET",
+                data: {add_ticker: $("#add_ticker").val()},
+                success: function(response) {},
+                error: function(xhr) {}
+            }); 
+
+            //var listOfTickers = {{ tickers | safe }};
             const tickerValue = document.getElementById('add_ticker').value;
             const tickerQuantity = document.getElementById('add_quantity').value;
 
             const tbody = document.createElement('tr');
 
             tbody.innerHTML = '<th scope="row">' + tickerValue + '</th>' +
-                    '<td>{tickerName}</td>' +
+                    '<td>{price}</td>' +
                     '<td>' + tickerQuantity + '</td>' +
-                    '<td>{currentPrice}</td>' +
+                    '<td>{value}</td>' +
                     '<td><input type="button" value="-" onclick="removeTicker(this)" /></td>';
 
             document.getElementById('currentInvestmentsBody').appendChild(tbody);
