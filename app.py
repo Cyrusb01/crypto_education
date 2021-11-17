@@ -6,6 +6,7 @@ import pandas as pd
 from helpers import pandas_to_highcharts
 from newsapi import NewsApiClient
 import os
+import quantstats as qs 
 
 
 app = Flask(__name__)
@@ -111,19 +112,49 @@ def research():
 @app.route('/portfolio', methods= ['GET', 'POST'])
 def portfolio():
     lastPrice = 0
-    if request.method == 'POST':
-        ticker = request.form.get("add_ticker")
-        tickeryf = yf.Ticker( ticker + "-USD" )
-        data = tickeryf.history()
-        lastPrice = (data.tail(1)['Close'].iloc[0])
-        #print( ticker, lastPrice )
-        chartID = "chart_ID"
-        data = yf.download(ticker + "-USD", start="2017-01-01", end="2021-11-01")
-        df = pd.DataFrame(data)
-        df = df[["Close"]]
-        json_dict = pandas_to_highcharts(df)
 
-        return (str( lastPrice ))
+    tickers = ["BTC", "ETH", "AAPL"]
+    allocations = [.40, .30, .30]
+
+    if request.method == 'POST':
+
+        
+
+        stock_dic = {tickers[i]: allocations[i] for i in range(len(tickers))}
+
+        control = qs.utils.make_index(stock_dic, rebalance="1Q")
+
+        #Generate three different portfolios
+
+        #conservative one = 3% into BTC 
+
+        if ("BTC" not in tickers):
+            conserv_tickers = tickers.copy()
+            new_alloc = allocations.copy()
+            new_alloc = [x-(x*100)*.03 for x in new_alloc]
+            new_alloc.append(.03)
+
+            # stock_dic = 
+
+        #More involved = 3% BTC 3% ETH
+
+        #Very risky = 2% BTC 2% ETH 2% BNB 2% ADA 2% XRP
+
+
+
+
+        # ticker = request.form.get("add_ticker")
+        # tickeryf = yf.Ticker( ticker + "-USD" )
+        # data = tickeryf.history()
+        # lastPrice = (data.tail(1)['Close'].iloc[0])
+        #print( ticker, lastPrice )
+        # chartID = "chart_ID"
+        # data = yf.download(ticker + "-USD", start="2017-01-01", end="2021-11-01")
+        # df = pd.DataFrame(data)
+        # df = df[["Close"]]
+        # json_dict = pandas_to_highcharts(df)
+
+        # return (str( lastPrice ))
 
 
     # Update table on page with data from "tickers" array
