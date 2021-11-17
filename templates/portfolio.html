@@ -73,8 +73,8 @@
                                 <input type="text" class="form-control" placeholder="Ticker" aria-label="Enter Ticker"
                                     aria-describedby="button-addon2" style="margin-right: 10px" id="add_ticker" name="add_ticker"/>
                                 
-                                <input type="text" class="form-control" placeholder="Quantity" aria-label="Enter Ticker"
-                                    aria-describedby="button-addon2" style="margin-right: 10px" id="add_quantity"/>
+                                <input type="text" class="form-control" placeholder="Percent Allocation" aria-label=""
+                                    aria-describedby="button-addon2" style="margin-right: 10px" id="add_allocation" name="add_allocation"/>
 
                                 <button class="btn btn-primary" type="button" onclick="addTicker()" id="btn_addticker">Add</button>
                                 </div>
@@ -116,7 +116,7 @@
                     <div id={{ chartID|safe }} class="chart" ></div>
                     <script type = "text/javascript">
                         var chart_id = {{ chartID|safe }}
-                        //var title = {{ title|safe }}
+                        var title = {{ title|safe }}
                         var data = {{ data|safe }}
                     </script>
                     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
@@ -153,11 +153,34 @@
     <script>
         function addTicker() {
 
+            // Add ticker to list of cookies
+            // Get string of cookies
+            // Append new ticker
+            // Set cookie
+
+            cookie_tickers = getCookie("portfolio_tickers");
+            //alert( cookie_tickers );
+            cookie_tickers += $("#add_ticker").val();
+            cookie_tickers += ",";
+            setCookie("portfolio_tickers", cookie_tickers, 365);
+            alert( cookie_tickers );
+
+            cookie_allocation = getCookie("portfolio_allocations");
+            cookie_allocation += $("#add_allocation").val();
+            cookie_allocation += ",";
+            setCookie("portfolio_allocations", cookie_allocation, 365);
+            alert( cookie_allocation );
+
             // 
+            localStorage.getItem()
             $.ajax({
                 url: "/portfolio",
                 type: "POST",
-                data: {add_ticker: $("#add_ticker").val()},
+                data: {
+                    add_ticker: $("#add_ticker").val(),
+                    tickers: getCookie("portfolio_tickers"),
+                    allocations: getCookie("allocations")
+                },
                 success: function(response) {
                     $("#" + $("#add_ticker").val() + "_row_price").html(response);
                     quantity = $("#" + $("#add_ticker").val() + "_row_quantity").html();
@@ -183,6 +206,29 @@
 
         function removeTicker(input) {
             document.getElementById('currentInvestmentsBody').removeChild(input.parentNode.parentNode);
+        }
+
+        function setCookie(cname, cvalue, exdays) {
+            const d = new Date();
+            d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+            let expires = "expires="+d.toUTCString();
+            document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+        }
+
+        function getCookie(cname) {
+            let name = cname + "=";
+            let decodedCookie = decodeURIComponent(document.cookie);
+            let ca = decodedCookie.split(';');
+            for(let i = 0; i <ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
         }
 
         function setTheme( newTheme ) {
