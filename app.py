@@ -113,10 +113,16 @@ def portfolio():
     lastPrice = 0
     if request.method == 'POST':
         ticker = request.form.get("add_ticker")
-        ticker = yf.Ticker( ticker + "-USD" )
-        data = ticker.history()
+        tickeryf = yf.Ticker( ticker + "-USD" )
+        data = tickeryf.history()
         lastPrice = (data.tail(1)['Close'].iloc[0])
-        print( ticker, lastPrice )
+        #print( ticker, lastPrice )
+        chartID = "chart_ID"
+        data = yf.download(ticker + "-USD", start="2017-01-01", end="2021-11-01")
+        df = pd.DataFrame(data)
+        df = df[["Close"]]
+        json_dict = pandas_to_highcharts(df)
+
         return (str( lastPrice ))
 
 
