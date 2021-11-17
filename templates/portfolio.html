@@ -156,9 +156,13 @@
 
             $.ajax({
                 url: "/portfolio",
-                type: "GET",
+                type: "POST",
                 data: {add_ticker: $("#add_ticker").val()},
-                success: function(response) {},
+                success: function(response) {
+                    $("#" + $("#add_ticker").val() + "_row_price").html(response);
+                    quantity = $("#" + $("#add_ticker").val() + "_row_quantity").html();
+                    $("#" + $("#add_ticker").val() + "_row_portfolioValue").html( quantity * response );
+                },
                 error: function(xhr) {}
             }); 
 
@@ -167,11 +171,12 @@
             const tickerQuantity = document.getElementById('add_quantity').value;
 
             const tbody = document.createElement('tr');
+            tbody.setAttribute("id", tickerValue + "_row");
 
             tbody.innerHTML = '<th scope="row">' + tickerValue + '</th>' +
-                    '<td>{price}</td>' +
-                    '<td>' + tickerQuantity + '</td>' +
-                    '<td>{value}</td>' +
+                    '<td id="' + tickerValue + '_row_price">' + "{price}" + '</td>' +
+                    '<td id="' + tickerValue + '_row_quantity">' + tickerQuantity + '</td>' +
+                    '<td id="' + tickerValue + '_row_portfolioValue">' + "{value}" + '</td>' +
                     '<td><input type="button" value="-" onclick="removeTicker(this)" /></td>';
 
             document.getElementById('currentInvestmentsBody').appendChild(tbody);

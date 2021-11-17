@@ -53,6 +53,10 @@ def research():
     df = df[["Close"]]
     json_dict = pandas_to_highcharts(df)
 
+    # TESTING - Z
+    print(df.iloc[-1])
+    # END TESTING
+
     ##################################################### GET NEWS ##########################################################
     news_api_key = os.getenv("NEWS_API_KEY")
     # print(news_api_key)
@@ -106,9 +110,15 @@ def research():
 
 @app.route('/portfolio', methods= ['GET', 'POST'])
 def portfolio():
-    if request.method == 'GET':
-        ticker = request.form("add_ticker")
-        print(ticker)
+    lastPrice = 0
+    if request.method == 'POST':
+        ticker = request.form.get("add_ticker")
+        ticker = yf.Ticker( ticker + "-USD" )
+        data = ticker.history()
+        lastPrice = (data.tail(1)['Close'].iloc[0])
+        print( ticker, lastPrice )
+        return (str( lastPrice ))
+
 
     # Update table on page with data from "tickers" array
     # Update graph on page with "tickers"
