@@ -19,7 +19,7 @@
         <title>CryptoWorld</title>
     </head>
 </html>
-    <body style="height:100%; font-family: 'Trebuchet MS', sans-serif; background: var(--color-background)">
+    <body style="height:100%; font-family: 'Trebuchet MS', sans-serif; background: var(--color-background)" onload="setupTable();">
         
         <!-- Navbar -->
         <nav class="navbar navbar-expand navbar-light zv-nav zv-navbar-bg" style="padding-left:20px; padding-right:20px;">
@@ -81,35 +81,30 @@
                             </div>
                         </div>
                     </form>
-                    
-                    
-                    <table class="table table-sm" id="currentInvestmentsTable">
-                        <thead class="table-dark">
-                          <tr>
-                            <th scope="col">Currency</th>
-                            <th scope="col">Current Price</th>
-                            <th scope="col">Quantity</th>
-                            <th scope="col">Portfolio Value</th>
-                            <th scope="col"></th>
-                          </tr>
+                                      
+                    <!-- Table of current investments go here -->
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Ticker</th>
+                                <th scope="col">Percentage</th>
+                                <th scope="col"></th>
+                            </tr>
                         </thead>
-                        <tbody id="currentInvestmentsBody">
-                          
+                        <tbody id="currentInvestmentsTable">
+                            <tr>
+                                <th scope="row">BTC</th>
+                                <td>24%</td>
+                                <td></td>
+                            </tr>
                         </tbody>
-                      </table>
+                    </table>
 
-                    
-
-                <!-- </div> -->
-                <!-- <div class="col-md-6">
-                    <div class="rounded-circle" id="pie"></div>
-                </div> -->
             </div>
 
             <div class="row form-group">
                 <div class="col-md-6">
-                        <p class="zv-text">Current Value of Investments: $xxx.xx</p>
-                        <p class="zv-text">Growth in last year: xx%</p>
+                        
                 </div>
                 <div class="col-md-5">
                     <div id={{ chartID|safe }} class="chart" ></div>
@@ -126,11 +121,7 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    <div class="card" id="stats">
-                        <div class="card-body">
-                            <p>Put stat chart here</p>
-                        </div>
-                    </div>
+                    
                 </div>
             </div>
 
@@ -150,57 +141,46 @@
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
     <script>
-        function addTicker() {
+        function setupTable() {
 
             // Add ticker to list of cookies
             // Get string of cookies
             // Append new ticker
             // Set cookie
-            cookie_tickers = getCookie("portfolio_tickers");
+            //cookie_tickers = getCookie("portfolio_tickers");
             //alert( cookie_tickers );
-            cookie_tickers += $("#add_ticker").val();
-            cookie_tickers += ",";
-            setCookie("portfolio_tickers", cookie_tickers, 365);
+            //cookie_tickers += $("#add_ticker").val();
+            //cookie_tickers += ",";
+            //setCookie("portfolio_tickers", cookie_tickers, 365);
             //alert( cookie_tickers );
-            cookie_allocation = getCookie("portfolio_allocations");
-            cookie_allocation += $("#add_allocation").val();
-            cookie_allocation += ",";
-            setCookie("portfolio_allocations", cookie_allocation, 365);
+            //cookie_allocation = getCookie("portfolio_allocations");
+            //cookie_allocation += $("#add_allocation").val();
+            //cookie_allocation += ",";
+            //setCookie("portfolio_allocations", cookie_allocation, 365);
             //alert( cookie_allocation );
 
-            // 
-            localStorage.getItem()
-            $.ajax({
-                url: '/portfolio',
-                type: 'POST',
-                data: {
-                    add_ticker: $("#add_ticker").val()
-                },
-                success: function(response) {
-                    $("#" + $("#add_ticker").val() + "_row_price").html(response);
-                    quantity = $("#" + $("#add_ticker").val() + "_row_quantity").html();
-                    $("#" + $("#add_ticker").val() + "_row_portfolioValue").html( quantity * response );
-                },
-                error: function(xhr) {}
-            }); 
+            { % for item in tickers % } 
+            {
+                
+                const tickerValue = item.name;//document.getElementById('add_ticker').value;
+                //const tickerQuantity = document.getElementById('add_quantity').value;
 
-            const tickerValue = document.getElementById('add_ticker').value;
-            const tickerQuantity = document.getElementById('add_quantity').value;
+                const tbody = document.createElement('tr');
+                tbody.setAttribute("id", tickerValue + "_row");
 
-            const tbody = document.createElement('tr');
-            tbody.setAttribute("id", tickerValue + "_row");
+                tbody.innerHTML = '<th scope="row">' + tickerValue + '</th>' +
+                        '<td id="' + tickerValue + '_row_quantity">' + "0%" + '</td>' +
+                        '<td><input type="button" value="-" onclick="removeTicker(this)" /></td>';
 
-            tbody.innerHTML = '<th scope="row">' + tickerValue + '</th>' +
-                    '<td id="' + tickerValue + '_row_price">' + "{price}" + '</td>' +
-                    '<td id="' + tickerValue + '_row_quantity">' + tickerQuantity + '</td>' +
-                    '<td id="' + tickerValue + '_row_portfolioValue">' + "{value}" + '</td>' +
-                    '<td><input type="button" value="-" onclick="removeTicker(this)" /></td>';
+                document.getElementById('currentInvestmentsTable').appendChild(tbody);
 
-            document.getElementById('currentInvestmentsBody').appendChild(tbody);
+            }
+            { % endfor % }
+   
         }
 
         function removeTicker(input) {
-            document.getElementById('currentInvestmentsBody').removeChild(input.parentNode.parentNode);
+            document.getElementById('currentInvestmentsTable').removeChild(input.parentNode.parentNode);
         }
 
         function setCookie(cname, cvalue, exdays) {
