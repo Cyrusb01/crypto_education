@@ -3,7 +3,7 @@ import yfinance as yf
 from pandas_highcharts.core import serialize
 import json
 import pandas as pd
-from helpers import pandas_to_highcharts
+from helpers import pandas_to_highcharts, get_crypto_price, get_stock_price
 from newsapi import NewsApiClient
 import os
 import quantstats as qs 
@@ -113,28 +113,67 @@ def research():
 def portfolio():
     lastPrice = 0
 
-    tickers = ["BTC", "ETH", "AAPL"]
-    allocations = [.40, .30, .30]
+    # tickers = ["BTC", "ETH", "AAPL"]
+    # allocations = [.40, .30, .30]
 
-    if request.method == 'POST':
+   
 
+    # if request.method == 'POST':
+
+    try:
+        tickers = request.cookies.get("portfolio_tickers").split(',')
+        tickers = [x for x in tickers if x != '']
+        
+        allocations = request.cookies.get("portfolio_allocations").split(',')
+        allocations = [float(x) for x in allocations if x != '']
+
+        print(tickers)
+        print(allocations)
+    except:
+        tickers = ["BTC", "ETH"]
+        allocations = [.5, .5]
+
+    #get Data for these
+
+    data = pd.DataFrame()
+    for ticker in tickers: 
+        got_data = True
+        try: #Try and get crypto data 
+            df = get_crypto_price(ticker, "USD", 2000)
+        except: #either not a crypto or dont have data for it
+            try:
+                df = get_stock_price(ticker)
+            except:
+                got_data = False
+        if(not got_data):
+            print(ticker, "FAILED")
+            #RETURN ERROR MESSAGE HERE 
+        else:
+            data = data.join(df, how="outer")
+    
+    print(data)
         
 
-        stock_dic = {tickers[i]: allocations[i] for i in range(len(tickers))}
 
-        control = qs.utils.make_index(stock_dic, rebalance="1Q")
+    stock_dic = {tickers[i]: allocations[i] for i in range(len(tickers))}
 
-        #Generate three different portfolios
+    # control = qs.utils.make_index(stock_dic, rebalance="1Q")
 
-        #conservative one = 3% into BTC 
+    #Generate three different portfolios
 
-        if ("BTC" not in tickers):
-            conserv_tickers = tickers.copy()
-            new_alloc = allocations.copy()
-            new_alloc = [x-(x*100)*.03 for x in new_alloc]
-            new_alloc.append(.03)
+    #conservative one = 3% into BTC 
 
-            # stock_dic = 
+    if ("BTC" not in tickers):
+        conserv_tickers = tickers.copy()
+        conserv_tickers.append("BTC")
+        new_alloc = allocations.copy()
+        new_alloc = [x-(x*100)*.03 for x in new_alloc]
+        new_alloc.append(.03)
+        
+        stock_dic = {conserv_tickers[i]: new_alloc[i] for i in range(len(conserv_tickers))}
+        # conserv = qs.utils.make_index(stock_dic, rebalance="1Q")
+
+            
 
         #More involved = 3% BTC 3% ETH
 
