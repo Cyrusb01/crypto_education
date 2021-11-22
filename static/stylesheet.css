@@ -12,12 +12,6 @@
    --font-color: #303841;
 }
 
-.dark-mode {
-   --color-background: #303841;
-   --color-accent: #E84A5F;
-   --font-color: #EEEEEE;
-}
-
 .zv-nav {
     text-align:center;
     display:block;
