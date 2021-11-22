@@ -76,8 +76,7 @@
                                 <input type="text" class="form-control" placeholder="Percent Allocation" aria-label=""
                                     aria-describedby="button-addon2" style="margin-right: 10px" id="add_allocation" name="add_allocation"/>
 
-                                <button class="btn btn-primary" type="button" onclick="addTicker()" id="btn_addticker">Add</button>
-                                </div>
+                                <button class="btn btn-primary" type="submit" id="btn_addticker">Add</button>
                             
                             </div>
                         </div>
@@ -157,19 +156,17 @@
             // Get string of cookies
             // Append new ticker
             // Set cookie
-
             cookie_tickers = getCookie("portfolio_tickers");
             //alert( cookie_tickers );
             cookie_tickers += $("#add_ticker").val();
             cookie_tickers += ",";
             setCookie("portfolio_tickers", cookie_tickers, 365);
-            alert( cookie_tickers );
-
+            //alert( cookie_tickers );
             cookie_allocation = getCookie("portfolio_allocations");
             cookie_allocation += $("#add_allocation").val();
             cookie_allocation += ",";
             setCookie("portfolio_allocations", cookie_allocation, 365);
-            alert( cookie_allocation );
+            //alert( cookie_allocation );
 
             // 
             localStorage.getItem()
@@ -177,9 +174,7 @@
                 url: "/portfolio",
                 type: "POST",
                 data: {
-                    add_ticker: $("#add_ticker").val(),
-                    tickers: getCookie("portfolio_tickers"),
-                    allocations: getCookie("allocations")
+                    add_ticker: $("#add_ticker").val()
                 },
                 success: function(response) {
                     $("#" + $("#add_ticker").val() + "_row_price").html(response);
