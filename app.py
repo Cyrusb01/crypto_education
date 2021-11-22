@@ -175,9 +175,7 @@ def portfolio():
                 df["control"][i] = df["control"][i-1] * ( 1 + df["control"][i])
         
         print(df)
-        json_dict = pandas_to_highcharts(df)
-        title = {"text": "Graph"}
-        chartID = "chart_ID"
+        
 
 
         #Generate three different portfolios
@@ -217,8 +215,9 @@ def portfolio():
             # return (str( lastPrice ))
 
 
-    # Update table on page with data from "tickers" array
-    # Update graph on page with "tickers"
+        json_dict = pandas_to_highcharts(df)
+        title = {"text": "Graph"}
+        chartID = "chart_ID"
     return render_template("portfolio.html", title=title, chartID=chartID, data=json_dict)
 
 
