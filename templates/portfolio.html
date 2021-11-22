@@ -42,11 +42,7 @@
                         <a class="nav-link" href="/fun" style="font-size:23px; padding-left: 20px; padding-right: 20px;">Fun</a>
                     </li>
                 </ul>
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" onclick="toggleTheme()" style="font-size:23px;"><i id="themeToggle" class="bi bi-sun"></i></a>
-                    </li>
-                </ul>
+
             </div>
         </div>
         </nav>
@@ -205,28 +201,6 @@
             }
             return "";
         }
-
-        function setTheme( newTheme ) {
-            localStorage.setItem( 'theme', newTheme );
-            document.documentElement.className = newTheme;
-        }
-        
-        function toggleTheme() {
-            if ( localStorage.getItem('theme') === 'light-mode' ) {
-                setTheme( 'dark-mode' ) ;
-                document.getElementById("themeToggle").className = "bi bi-sun";
-            } else {
-                setTheme( 'light-mode' );
-                document.getElementById("themeToggle").className = "bi bi-moon";
-            }
-        }
-        
-        (function () {
-            if ( localStorage.getItem('theme') === 'light-mode' ) {
-                setTheme( 'light-mode' ) ;
-                document.getElementById("themeToggle").className = "bi bi-moon";
-            } 
-        })();
 
     </script>
   </body>
