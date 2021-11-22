@@ -62,7 +62,7 @@ def get_stock_price(symbol):
     return df
 
 
-print(get_stock_price("AAPL"))
+# print(get_stock_price("AAPL"))
 
 def pandas_to_highcharts(df):
     df.index = [t.value // 10 ** 6 for t in df.index]
