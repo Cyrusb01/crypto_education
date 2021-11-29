@@ -166,6 +166,7 @@ def portfolio():
         control = qs.utils.make_index(stock_dic, returns=data, rebalance="1Q")
 
         df = pd.DataFrame(control)
+
         df.columns = ["control"]
 
         for i in range(len(df)):
@@ -218,7 +219,7 @@ def portfolio():
         json_dict = pandas_to_highcharts(df)
         title = {"text": "Graph"}
         chartID = "chart_ID"
-    return render_template("portfolio.html", title=title, chartID=chartID, data=json_dict)
+    return render_template("portfolio.html", tickers = ['ETH', 'ADA', "BTC"], title=title, chartID=chartID, data=json_dict)
 
 
 
