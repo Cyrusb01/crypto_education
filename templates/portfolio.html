@@ -20,7 +20,6 @@
     </head>
 </html>
     <body style="height:100%; font-family: 'Trebuchet MS', sans-serif; background: var(--color-background)" onload="setupTable();">
-        
         <!-- Navbar -->
         <nav class="navbar navbar-expand navbar-light zv-nav zv-navbar-bg" style="padding-left:20px; padding-right:20px;">
         <div class="container-fluid">
@@ -39,7 +38,7 @@
                         <a class="nav-link" href="/portfolio" style="font-size:23px; padding-left: 20px; padding-right: 20px; color: var(--color-accent);">Portfolio</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/fun" style="font-size:23px; padding-left: 20px; padding-right: 20px;">Fun</a>
+                        <a class="nav-link" href="/faq" style="font-size:23px; padding-left: 20px; padding-right: 20px;">Crypto101</a>
                     </li>
                 </ul>
 
@@ -49,19 +48,22 @@
         
         <!-- Navbar -->
       
+        
+
         <!-- Body Stuff Goes Here -->
-        <div class="container">
+        <div class="container" style="max-width:1680px;">
 
             <div class="row justify-content-center" style="margin-bottom: 20px;">
                 <p class="zv-h1 text-center" id="header_cryptoTicker">Your Portfolio</p>
+                <button class="btn btn-danger" style="width:auto;" data-bs-toggle="modal" data-bs-target="#howtopopup">How to use this tool!</button>
             </div>
 
-            <div class="row form-group" style="width:75%; margin:auto;">
-                <!-- <div class="col-md-6" id="investments"> -->
+            <div class="row form-group" style="width:85%; margin:auto;">
+
+                <!-- <div class="col-md-6"> -->
 
                     <p class="zv-h2" style="text-align: center;">Your Current Investments</p>
 
-                    
                     <form method="POST">
                         <div class="row justify-content-center" style="margin-bottom: 10px;">
                             <div class="input-group mb-3" style="width: 50%;">
@@ -83,26 +85,35 @@
                         <thead>
                             <tr>
                                 <th scope="col">Ticker</th>
-                                <th scope="col">Percentage</th>
+                                <th scope="col">Your Portfolio</th>
+                                <th scope="col">L Portfolio</th>
+                                <th scope="col">M Portfolio</th>
+                                <th scope="col">A Portfolio</th>
                                 <th scope="col"></th>
                             </tr>
                         </thead>
                         <tbody id="currentInvestmentsTable">
-                            <tr>
-                                <th scope="row">BTC</th>
-                                <td>24%</td>
-                                <td></td>
-                            </tr>
+                            {% for item in tickers %} 
+                                <tr>
+                                    <th scope="row">{{item[0]}}</th>
+                                    <td>{{item[1]}}</td>
+                                    <td>{{item[2]}}</td>
+                                    <td>{{item[3]}}</td>
+                                    <td>{{item[4]}}</td>
+                                    <td></td>
+                                </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
+                <!-- </div> -->
 
             </div>
 
-            <div class="row form-group">
-                <div class="col-md-6">
-                        
+            <div class="row form-group" style="width:85%; margin:auto;">
+                <div class="col-md-6" id="scatterPlotDiv" style="padding-right: 20px;">
+                    <!--Scatter Plot Goes Here-->
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-6">
                     <div id={{ chartID|safe }} class="chart" ></div>
                     <script type = "text/javascript">
                         var chart_id = {{ chartID|safe }}
@@ -115,30 +126,89 @@
                 </div>
             </div>
 
-            <div class="row">
+            <div class="row" style="width:85%; margin:auto;">
                 <div class="col-md-6">
-                    
+                    <!--Statistics Table Goes Here-->
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Statistics</th>
+                                <th scope="col">Your Portfolio</th>
+                                <th scope="col">L Portfolio</th>
+                                <th scope="col">M Portfolio</th>
+                                <th scope="col">A Portfolio</th>
+                            </tr>
+                        </thead>
+                        <tbody id="statisticsTable">
+                            <tr>
+                                <th scope="row">Return</th>
+                                <td>10%</td>
+                                <td>15%</td>
+                                <td>20%</td>
+                                <td>25%</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Sortino Ratio</th>
+                                <td>10%</td>
+                                <td>15%</td>
+                                <td>20%</td>
+                                <td>25%</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Sharpe Ratio</th>
+                                <td>10%</td>
+                                <td>15%</td>
+                                <td>20%</td>
+                                <td>25%</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Volatility</th>
+                                <td>10%</td>
+                                <td>15%</td>
+                                <td>20%</td>
+                                <td>25%</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
         </div>
         <!-- Body Stuff Ends Here -->
         
-        <footer class="fixed-bottom bg-light text-center text-lg-start">
-        <!-- Copyright -->
-        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
-            © 2021 Copyright:
-            <a class="text-dark">CryptoEducation.com</a>
-        </div>
-        <!-- Copyright -->
-        </footer>
+        <div class="modal fade" id="howtopopup" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">How to use the portfolio tool</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ut lectus id massa fringilla convallis sit amet mattis nisi. Suspendisse a eleifend massa, sit amet dignissim tortor. Nunc non arcu quis ligula sollicitudin sodales id quis tellus. Nam at magna et dolor ultricies aliquet. Vestibulum consectetur turpis felis, id dictum nulla finibus sed. Aliquam dapibus tristique ornare. Suspendisse laoreet sed magna id hendrerit. Aliquam dolor metus, commodo pulvinar posuere ut, volutpat sit amet elit. Vivamus consequat libero at magna volutpat venenatis. Praesent commodo molestie iaculis. Curabitur lobortis convallis dolor, eu egestas leo aliquam sit amet.
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        <footer class="bg-light text-center text-lg-start">
+            <!-- Copyright -->
+            <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
+              © 2021 Copyright:
+              <a class="text-dark">CryptoWorld.com</a>
+            </div>
+            <!-- Copyright -->
+          </footer>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
     <script>
         function setupTable() {
-
             // Add ticker to list of cookies
             // Get string of cookies
             // Append new ticker
@@ -155,25 +225,17 @@
             //setCookie("portfolio_allocations", cookie_allocation, 365);
             //alert( cookie_allocation );
 
-            { % for item in tickers % } 
-            {
-                
-                alert("adding one ticker");
-                const tickerValue = item.name;//document.getElementById('add_ticker').value;
-                //const tickerQuantity = document.getElementById('add_quantity').value;
+            var trace3 = {
+                x: [1, 2, 3, 4],
+                y: [12, 9, 15, 12],
+                mode: 'lines+markers',
+                type: 'scatter'
+            };
 
-                const tbody = document.createElement('tr');
-                tbody.setAttribute("id", tickerValue + "_row");
+            var data = [trace3];
 
-                tbody.innerHTML = '<th scope="row">' + tickerValue + '</th>' +
-                        '<td id="' + tickerValue + '_row_quantity">' + "0%" + '</td>' +
-                        '<td><input type="button" value="-" onclick="removeTicker(this)" /></td>';
-
-                document.getElementById('currentInvestmentsTable').appendChild(tbody);
-
-            }
-            { % endfor % }
-   
+            Plotly.newPlot('scatterPlotDiv', data);
+            
         }
 
         function removeTicker(input) {

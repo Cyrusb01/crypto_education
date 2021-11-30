@@ -28,7 +28,7 @@ import yfinance as yf
 
 def get_crypto_price(symbol, exchange, days):
     api_key = os.getenv("CRYPTO_COMPARE")
-    api_url = f'https://min-api.cryptocompare.com/data/v2/histoday?fsym={symbol}&tsym={exchange}&limit={days}&api_key={api_key}'
+    api_url = 'https://min-api.cryptocompare.com/data/v2/histoday?fsym='+str(symbol)+'&tsym='+str(exchange)+'&limit='+str(days)+'&api_key='+str(api_key)
     raw = requests.get(api_url).json()
     df = pd.DataFrame(raw['Data']['Data'])[['time', 'high', 'low', 'open']].set_index('time')
     df.index = pd.to_datetime(df.index, unit = 's')
