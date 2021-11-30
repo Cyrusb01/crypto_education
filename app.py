@@ -119,7 +119,7 @@ def portfolio():
 
     # tickers = ["BTC", "ETH", "AAPL"]
     # allocations = [.40, .30, .30]
-    if True:
+    if request.method == 'POST':
 
         try:
             
@@ -136,7 +136,7 @@ def portfolio():
             print(allocations)
         except:
             tickers = ["AAPL", "MSFT"]
-            data_tickers = ["AAPL", "MSFT", "BTC", "ETH"]
+            data_tickers = ["AAPL", "MSFT", "BTC", "ETH", "BNB", "ADA", "XRP"]
             allocations = [.5, .5]
 
         #get Data for these
