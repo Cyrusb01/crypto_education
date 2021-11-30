@@ -228,9 +228,9 @@ def portfolio():
             # return (str( lastPrice ))
 
 
-        json_dict = pandas_to_highcharts(df)
-        title = {"text": "Compare Portfolios"}
-        chartID = "chart_ID"
+    json_dict = pandas_to_highcharts(df)
+    title = {"text": "Compare Portfolios"}
+    chartID = "chart_ID"
     return render_template("portfolio.html", tickers = [["ETH", "25%"], ["ABC", "25%"], ["BTC", "25%"]], title=title, chartID=chartID, data=json_dict)
 
 
