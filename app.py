@@ -121,7 +121,6 @@ def portfolio():
    
 
     if True:
-
         try:
             
             tickers = request.cookies.get("portfolio_tickers")
@@ -219,7 +218,7 @@ def portfolio():
         json_dict = pandas_to_highcharts(df)
         title = {"text": "Graph"}
         chartID = "chart_ID"
-    return render_template("portfolio.html", tickers = ['ETH', 'ADA', "BTC"], title=title, chartID=chartID, data=json_dict)
+    return render_template("portfolio.html", tickers = [["ETH", "25%"], ["ABC", "25%"], ["BTC", "25%"]], title=title, chartID=chartID, data=json_dict)
 
 
 
