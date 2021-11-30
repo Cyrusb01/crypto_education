@@ -119,6 +119,7 @@ def portfolio():
 
     # tickers = ["BTC", "ETH", "AAPL"]
     # allocations = [.40, .30, .30]
+    df = pd.DataFrame()
     if request.method == 'POST':
 
         try:
