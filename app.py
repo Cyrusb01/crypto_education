@@ -185,7 +185,6 @@ def portfolio():
         #Generate three different portfolios
 
         #conservative one = 3% into BTC 
-
         if ("BTC" not in tickers):
             conserv_tickers = tickers.copy()
             conserv_tickers.append("BTC")
