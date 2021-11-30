@@ -119,7 +119,8 @@ def portfolio():
 
     # tickers = ["BTC", "ETH", "AAPL"]
     # allocations = [.40, .30, .30]
-    if True:
+    if request.method == 'POST':
+
         try:
             
             tickers = request.cookies.get("portfolio_tickers")
@@ -135,7 +136,7 @@ def portfolio():
             print(allocations)
         except:
             tickers = ["AAPL", "MSFT"]
-            data_tickers = ["AAPL", "MSFT", "BTC", "ETH"]
+            data_tickers = ["AAPL", "MSFT", "BTC", "ETH", "BNB", "ADA", "XRP"]
             allocations = [.5, .5]
 
         #get Data for these
@@ -184,7 +185,6 @@ def portfolio():
         #Generate three different portfolios
 
         #conservative one = 3% into BTC 
-
         if ("BTC" not in tickers):
             conserv_tickers = tickers.copy()
             conserv_tickers.append("BTC")
