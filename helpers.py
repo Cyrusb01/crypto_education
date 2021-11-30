@@ -78,3 +78,13 @@ def pandas_to_highcharts(df):
         json_dict["data"] = data_list
     
     return [json_dict]
+
+
+def get_prices(df, name):
+    for i in range(len(df)):
+        if i == 0:
+            df[name][i] = 100
+        else:
+            df[name][i] = df[name][i-1] * ( 1 + df[name][i])
+    
+    return df
