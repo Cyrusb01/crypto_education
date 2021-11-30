@@ -1,9 +1,10 @@
 from flask import Flask, request, render_template
+from quantstats.utils import make_portfolio
 import yfinance as yf
 from pandas_highcharts.core import serialize
 import json
 import pandas as pd
-from helpers import pandas_to_highcharts, get_crypto_price, get_stock_price
+from helpers import pandas_to_highcharts, get_crypto_price, get_stock_price, get_prices
 from newsapi import NewsApiClient
 import os
 import quantstats as qs 
@@ -55,7 +56,7 @@ def research():
     json_dict = pandas_to_highcharts(df)
 
     # TESTING - Z
-    print(df.iloc[-1])
+    # print(df.iloc[-1])
     # END TESTING
 
     ##################################################### GET NEWS ##########################################################
@@ -63,14 +64,15 @@ def research():
     # print(news_api_key)
     newsapi = NewsApiClient(api_key=news_api_key)
     sources = newsapi.get_sources()
+    # print(sources)
     top_headlines = newsapi.get_everything(
         q=ticker,
-        #   sources='bbc-news,the-verge',
+        sources='decrypt,bloomberg,forbes,the-block,coindesk,google-news',
         #   category='business',
         language="en",
         #   country='us',
         from_param="2021-11-01",
-        to="2021-11-10",
+        to="2021-29-10",
         sort_by="relevancy",
         #   page = 1
     )
@@ -83,7 +85,7 @@ def research():
         sources.append(article["source"]["name"])
         headlines.append(article["title"])
         urls.append(article["url"])
-    print(urls[2])
+    # print(urls[2])
     if request.method == "POST":
         return render_template(
             "tickerlearning.html",
@@ -117,9 +119,6 @@ def portfolio():
 
     # tickers = ["BTC", "ETH", "AAPL"]
     # allocations = [.40, .30, .30]
-
-   
-
     if True:
 
         try:
@@ -136,13 +135,14 @@ def portfolio():
             print(tickers)
             print(allocations)
         except:
-            tickers = ["BTC", "ETH"]
+            tickers = ["AAPL", "MSFT"]
+            data_tickers = ["AAPL", "MSFT", "BTC", "ETH"]
             allocations = [.5, .5]
 
         #get Data for these
 
         data = pd.DataFrame()
-        for ticker in tickers: 
+        for ticker in data_tickers: 
             got_data = True
             try: #Try and get crypto data 
                 df = get_crypto_price(ticker, "USD", 2000).pct_change()
@@ -169,12 +169,15 @@ def portfolio():
 
         df.columns = ["control"]
 
-        for i in range(len(df)):
-            if i == 0:
-                df["control"][i] = 100
-            else:
-                df["control"][i] = df["control"][i-1] * ( 1 + df["control"][i])
         
+
+        # for i in range(len(df)):
+        #     if i == 0:
+        #         df["control"][i] = 100
+        #     else:
+        #         df["control"][i] = df["control"][i-1] * ( 1 + df["control"][i])
+        
+        df = get_prices(df, "control")
         print(df)
         
 
@@ -191,7 +194,17 @@ def portfolio():
             new_alloc.append(.03)
             
             stock_dic = {conserv_tickers[i]: new_alloc[i] for i in range(len(conserv_tickers))}
-            # conserv = qs.utils.make_index(stock_dic, rebalance="1Q")
+            conserv = qs.utils.make_index(stock_dic, returns = data, rebalance="1Q")
+
+            df_conserv = pd.DataFrame(conserv)
+
+            df_conserv.columns = ["conserv"]
+
+            df_conserv = get_prices(df_conserv, "conserv")
+        
+        df = df.join(df_conserv, how = "outer")
+        df = df.dropna()
+        print(df)
 
                 
 
@@ -217,7 +230,7 @@ def portfolio():
 
 
         json_dict = pandas_to_highcharts(df)
-        title = {"text": "Graph"}
+        title = {"text": "Compare Portfolios"}
         chartID = "chart_ID"
     return render_template("portfolio.html", tickers = ['ETH', 'ADA', "BTC"], title=title, chartID=chartID, data=json_dict)
 
