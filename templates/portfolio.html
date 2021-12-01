@@ -84,7 +84,7 @@
                     </form>
                                       
                     <!-- Table of current investments go here -->
-                    <table class="table">
+                    <table class="table table-striped">
                         <thead>
                             <tr>
                                 <th scope="col">Ticker</th>
@@ -132,7 +132,7 @@
             <div class="row" style="width:85%; margin:auto;">
                 <div class="col-md-6">
                     <!--Statistics Table Goes Here-->
-                    <table class="table">
+                    <table class="table table-striped">
                         <thead>
                             <tr>
                                 <th scope="col">Statistics</th>
@@ -228,6 +228,12 @@
             //setCookie("portfolio_allocations", cookie_allocation, 365);
             //alert( cookie_allocation );
 
+            const jsScatterPlotList = {{scatterplotlist | tojson}};
+            
+            jsScatterPlotList.array.forEach(element => {
+                alert(element);
+            });
+
             var trace3 = {
                 x: [1, 2, 3, 4],
                 y: [12, 9, 15, 12],
@@ -241,7 +247,8 @@
                 title: 'Risk vs Return Plot',
                 showlegend: true,
                 paper_bgcolor: 'rgba(0,0,0,0)',
-                plot_bgcolor: 'rgba(0,0,0,0)'
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                legend: {"orientation": "h"}
             };
 
 
