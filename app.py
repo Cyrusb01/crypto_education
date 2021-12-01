@@ -257,11 +257,18 @@ def portfolio():
             #More involved = 3% BTC 3% ETH
 
             #Very risky = 2% BTC 2% ETH 2% BNB 2% ADA 2% XRP
+            
             df = df.pct_change()
+            df.index = pd.to_datetime(df.index, unit = 'ms')
             port_return = df.cagr()
             port_volatility = df.volatility()
-            print(port_return)
-            print(port_volatility)
+            
+            df_conserv = df_conserv.pct_change()
+            df_conserv.index = pd.to_datetime(df_conserv.index, unit = 'ms')
+            conserv_return = df_conserv.cagr()
+            conserv_volatility = df_conserv.volatility()
+            
+            scatter = [["Your Portfolio", port_return, port_volatility], ["Light Crypto", conserv_return, conserv_volatility] ] 
 
 
 
@@ -276,7 +283,7 @@ def portfolio():
     # json_dict = pandas_to_highcharts(df)
     title = {"text": "Compare Portfolios"}
     chartID = "chart_ID"
-    return render_template("portfolio.html", tickers = table_list, title=title, chartID=chartID, data=series)
+    return render_template("portfolio.html", tickers = table_list, title=title, chartID=chartID, data=series, scatterplotlist = scatter)
 
 
 
