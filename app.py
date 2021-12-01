@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, make_response
 from quantstats.utils import make_portfolio
 import yfinance as yf
 from pandas_highcharts.core import serialize
@@ -8,7 +8,7 @@ from helpers import pandas_to_highcharts, get_crypto_price, get_stock_price, get
 from newsapi import NewsApiClient
 import os
 import quantstats as qs 
-
+qs.extend_pandas()
 
 app = Flask(__name__)
 
@@ -112,34 +112,67 @@ def research():
         )
 
 tickers = []
+allocations = []
 @app.route('/portfolio', methods= ['GET', 'POST'])
 def portfolio():
     lastPrice = 0
     global tickers
+    global allocations
 
     # tickers = ["BTC", "ETH", "AAPL"]
     # allocations = [.40, .30, .30]
     df = pd.DataFrame()
+    series = []
     if request.method == 'POST':
+        if request.form['submitbutton'] == "reset":
+            tickers = []
+            allocations = []
+        else:
+            try:
+                
 
-        try:
-            
-            tickers = request.cookies.get("portfolio_tickers")
-            tickers += request.form["add_ticker"]
-            tickers
-            tickers = tickers.split(',')
-            tickers = [x for x in tickers if x != '']
-            
-            allocations = request.cookies.get("portfolio_allocations").split(',')
-            allocations = [float(x) for x in allocations if x != '']
+                ticker = request.form["add_ticker"]
+                tickers.append(ticker)
+                print(tickers)
 
-            print(tickers)
-            print(allocations)
-        except:
-            tickers = ["AAPL", "MSFT"]
-            data_tickers = ["AAPL", "MSFT", "BTC", "ETH", "BNB", "ADA", "XRP"]
-            allocations = [.5, .5]
+                allocation = request.form["add_allocation"]
+                allocation = float(allocation)/100
+                allocations.append(allocation)
 
+                
+                # print(ticker)
+                # tickers = request.cookies.get("portfolio_tickers")
+                # if tickers == None:
+                #     tickers = [ticker]
+                # else:
+                #     tickers.append(ticker)
+                
+                # print(tickers)
+
+                # resp = make_response(render_template("portfolio.html"))
+                # print("here")
+                # resp.set_cookie("portfolio_tickers", "BTC,ETH")
+                # print("here")
+
+                # tickers = request.cookies.get("portfolio_tickers")
+                # print(tickers)
+                # # tickers = tickers.split(',')
+                # # tickers = [x for x in tickers if x != '']
+                
+                # allocations = request.cookies.get("portfolio_allocations").split(',')
+                # allocations = [float(x) for x in allocations if x != '']
+
+                # print(tickers)
+                # print(allocations)
+            except:
+                tickers = ["AAPL", "MSFT"]
+                data_tickers = ["AAPL", "MSFT", "BTC", "ETH", "BNB", "ADA", "XRP"]
+                allocations = [.5, .5]
+
+        data_tickers = tickers.copy()
+        if "BTC" not in data_tickers:
+            data_tickers.append("BTC")
+        
         #get Data for these
 
         data = pd.DataFrame()
@@ -156,83 +189,94 @@ def portfolio():
                 print(ticker, "FAILED")
                 #RETURN ERROR MESSAGE HERE 
             else:
-                data = data.join(df, how="outer")
+                try:
+                    data = data.join(df, how="outer")
+                except:
+                    print("error")
+        
+        
         
         print(data)
+        # data_new = data.dropna(inplace = True)
+        # print(data_new)
+            
+        series = []
+        if len(tickers) != 0:
+            series = []
+            
+            #Make portfolio for user strategy
+            stock_dic = {tickers[i]: allocations[i] for i in range(len(tickers))}
+            control = qs.utils.make_index(stock_dic, returns=data, rebalance="1Q")
+            df = pd.DataFrame(control)
+            df.columns = ["Your Strategy"]
+            df = get_prices(df, "Your Strategy")
+
+            print(df)
+            series += pandas_to_highcharts(df)
+
+            # print(df)
             
 
 
-        stock_dic = {tickers[i]: allocations[i] for i in range(len(tickers))}
+            #Generate three different portfolios
 
-        control = qs.utils.make_index(stock_dic, returns=data, rebalance="1Q")
-
-        df = pd.DataFrame(control)
-
-        df.columns = ["control"]
-
-        
-
-        # for i in range(len(df)):
-        #     if i == 0:
-        #         df["control"][i] = 100
-        #     else:
-        #         df["control"][i] = df["control"][i-1] * ( 1 + df["control"][i])
-        
-        df = get_prices(df, "control")
-        print(df)
-        
-
-
-        #Generate three different portfolios
-
-        #conservative one = 3% into BTC 
-        if ("BTC" not in tickers):
-            conserv_tickers = tickers.copy()
-            conserv_tickers.append("BTC")
-            new_alloc = allocations.copy()
-            new_alloc = [x-(x*100)*.03 for x in new_alloc]
-            new_alloc.append(.03)
-            
-            stock_dic = {conserv_tickers[i]: new_alloc[i] for i in range(len(conserv_tickers))}
-            conserv = qs.utils.make_index(stock_dic, returns = data, rebalance="1Q")
-
-            df_conserv = pd.DataFrame(conserv)
-
-            df_conserv.columns = ["conserv"]
-
-            df_conserv = get_prices(df_conserv, "conserv")
-        
-        df = df.join(df_conserv, how = "outer")
-        df = df.dropna()
-        print(df)
-
+            #conservative one = 3% into BTC 
+            if ("BTC" not in tickers):
+                conserv_tickers = tickers.copy()
+                conserv_tickers.append("BTC")
+                new_alloc = allocations.copy()
+                new_alloc = [x-(x*100)*.03 for x in new_alloc]
+                new_alloc.append(.03)
                 
+                stock_dic = {conserv_tickers[i]: new_alloc[i] for i in range(len(conserv_tickers))}
+                conserv = qs.utils.make_index(stock_dic, returns = data, rebalance="1Q")
+
+                df_conserv = pd.DataFrame(conserv)
+                df_conserv.columns = ["Light Crypto"]
+                df_conserv = get_prices(df_conserv, "Light Crypto")
+                series += pandas_to_highcharts(df_conserv)
+                print(df_conserv)
+            else:
+                conserv_tickers = tickers.copy()
+                # conserv_tickers.append("BTC")
+                new_alloc = allocations.copy()
+                new_alloc = [x-(x*100)*.03 for x in new_alloc]
+
+                new_alloc[conserv_tickers.index("BTC")] += .03
+                # new_alloc.append(.03)
+                
+                stock_dic = {conserv_tickers[i]: new_alloc[i] for i in range(len(conserv_tickers))}
+                conserv = qs.utils.make_index(stock_dic, returns = data, rebalance="1Q")
+
+                df_conserv = pd.DataFrame(conserv)
+                df_conserv.columns = ["Light Crypto"]
+                df_conserv = get_prices(df_conserv, "Light Crypto")
+                series += pandas_to_highcharts(df_conserv)
+                print(df_conserv)
 
             #More involved = 3% BTC 3% ETH
 
             #Very risky = 2% BTC 2% ETH 2% BNB 2% ADA 2% XRP
+            df = df.pct_change()
+            port_return = df.cagr()
+            port_volatility = df.volatility()
+            print(port_return)
+            print(port_volatility)
 
 
 
 
-            # ticker = request.form.get("add_ticker")
-            # tickeryf = yf.Ticker( ticker + "-USD" )
-            # data = tickeryf.history()
-            # lastPrice = (data.tail(1)['Close'].iloc[0])
-            #print( ticker, lastPrice )
-            # chartID = "chart_ID"
-            # data = yf.download(ticker + "-USD", start="2017-01-01", end="2021-11-01")
-            # df = pd.DataFrame(data)
-            # df = df[["Close"]]
-            # json_dict = pandas_to_highcharts(df)
+            
 
-            # return (str( lastPrice ))
-
-
-    json_dict = pandas_to_highcharts(df)
+    table_list = []
+    for i in range(len(tickers)):
+        temp = [tickers[i], str(allocations[i]) + "%"]
+        table_list.append(temp)
+    print(table_list)
+    # json_dict = pandas_to_highcharts(df)
     title = {"text": "Compare Portfolios"}
     chartID = "chart_ID"
-    return render_template("portfolio.html", tickers = [["ETH", "25%"], ["ABC", "25%"], ["BTC", "25%"]], title=title, chartID=chartID, data=json_dict)
+    return render_template("portfolio.html", tickers = table_list, title=title, chartID=chartID, data=series)
 
 
 
