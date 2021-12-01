@@ -123,6 +123,7 @@ def portfolio():
     # allocations = [.40, .30, .30]
     df = pd.DataFrame()
     series = []
+    scatter = []
     if request.method == 'POST':
         if request.form['submitbutton'] == "reset":
             tickers = []
