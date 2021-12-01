@@ -66,18 +66,19 @@
 
                     <form method="POST">
                         <div class="row justify-content-center" style="margin-bottom: 10px;">
-                            <div class="input-group mb-3" style="width: 50%;">
-                            
+                            <div class="col-sm-3">
                                 <input type="text" class="form-control" placeholder="Ticker" aria-label="Enter Ticker"
                                     aria-describedby="button-addon2" style="margin-right: 10px" id="add_ticker" name="add_ticker"/>
-                                
+                            </div>
+                            <div class="col-sm-3">
                                 <input type="text" class="form-control" placeholder="Percent Allocation" aria-label=""
                                     aria-describedby="button-addon2" style="margin-right: 10px" id="add_allocation" name="add_allocation"/>
-
+                            </div>
+                            <div class="col-sm-auto">
                                 <button class="btn btn-primary" type="submit" id="btn_addticker" name="submitbutton" value="add">Add</button>
-
+                            </div>
+                            <div class="col-sm-auto">
                                 <button class="btn btn-danger" type="submit" id="btn_resettickers" name="submitbutton" value="reset">Reset</button>
-                            
                             </div>
                         </div>
                     </form>
@@ -230,13 +231,21 @@
             var trace3 = {
                 x: [1, 2, 3, 4],
                 y: [12, 9, 15, 12],
-                mode: 'lines+markers',
+                mode: 'markers',
                 type: 'scatter'
             };
 
             var data = [trace3];
 
-            Plotly.newPlot('scatterPlotDiv', data);
+            var layout = {
+                title: 'Risk vs Return Plot',
+                showlegend: true,
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)'
+            };
+
+
+            Plotly.newPlot('scatterPlotDiv', data, layout, {staticPlot: true});
             
         }
 
