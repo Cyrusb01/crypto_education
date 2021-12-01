@@ -4,8 +4,36 @@ $(document).ready(function() {
 	Highcharts.stockChart(chart_id, {
 		
 		rangeSelector: {
-			selected: 1
+			selected: 5
 		},
+
+		tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.change}$)<br/>',
+            valueDecimals: 2,
+            split: true
+        },
+		legend: {
+			enabled: true
+		},
+		plotOptions: {
+            series: {
+                compare: 'percent',
+                showInNavigator: true
+            }
+        },
+		// yAxis: {
+        //     labels: {
+        //         formatter: function () {
+        //             return (this.value > 0 ? ' + ' : '') + this.value + '%';
+        //         }
+        //     },
+        //     plotLines: [{
+        //         value: 0,
+        //         width: 2,
+        //         color: 'silver'
+        //     }]
+		// },
+			
 
 		title: title,
 
