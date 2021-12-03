@@ -68,11 +68,20 @@
         <div class="row justify-content-center" style="margin-bottom:50px;">
             <div class="col-4">
                 <p class="zv-h1">Is Bitcoin Digital Gold?</p>
-                <p class="zv-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                <p class="zv-text">Although bitcoin is known as a "cryptocurrency", this name is a little misleading for many people. Bitcoin can be used as a currency, the coins are able to be sent and transfered, however most experts agree that bitcoin is more compareable to gold rather than the US dollar or any other currency. This stems from the fact that bitcoin is a great store of value, and there are a couple of reasons for this.  </p>
+                <p class = "zv-text">Why does bitcoin have value?</p>
+                <ul class = "zv-text">
+                    <li>Limited Supply</li>
+                    <li>Decentralized</li>
+                    <li>Borderless</li>
+                    <li>Easily Sent and Recieved</li>
+                    <li>Trustless and Safe</li>
+                  </ul>
+                <a class = "zv-text" href="https://www.investopedia.com/ask/answers/100314/why-do-bitcoins-have-value.asp">Click here for a more in-depth article</a>
             </div>
             <div class="col-6">
                 <!-- <p class="text-center">(Graph goes here)</p> -->
-                <div id={{ chartID|safe }} class="chart" ></div>
+                <div id={{ chartID|safe }} class="chart" style="height: 500px;"></div>
                 <script type = "text/javascript">
                     var chart_id = {{ chartID|safe }}
                     var title = {{ title|safe }}
@@ -82,6 +91,7 @@
                     <script src="https://code.highcharts.com/stock/highstock.js"></script> 
                     <script src="../static/js/main.js">
                 </script>
+                <p class = "zv-text">The chart above shows $100 invested into bitcoin and gold on January 1, 2017. With bitcoin, the $100 would have turned into {{btc_ret}} and for gold {{gld_ret}}</p>
             </div>
         </div>
       </div>

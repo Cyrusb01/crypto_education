@@ -71,13 +71,16 @@
         <div class="row justify-content-center" style="margin-bottom:50px;">
             <!--Description of Crypto-->
             <div class="col-4">
-                <p class="zv-h1">What is {{coin_name | safe}}?</p>
+                <p class="zv-h1" style="display:inline;">What is {{coin_name | safe}}?</p>
+                <!-- <img src={{logo}} style="height: 80px; display:inline;" > -->
                 <p class="zv-text"> {{ coin_description | safe }} </p>
+                <!-- <img src={{logo}}> -->
+                <a class= "zv-text" href={{link}}> Link to {{coin_name}} Website </a>
             </div>
             <!--Price Graph of Crypto-->
             <div class="col-6">
                 <!-- <p class="text-center">(Graph goes here)</p> -->
-                <div id={{ chartID|safe }} class="chart" ></div>
+                <div id={{ chartID|safe }} class="chart" style="height: 550px;" ></div>
                 <script type = "text/javascript">
                     var chart_id = {{ chartID|safe }}
                     var title = {{ title|safe }}
@@ -89,11 +92,11 @@
                 </script>
             </div>
         </div>
-        <div class="row justify-content-center" style="margin-bottom: 20px;">
+        <div class="row justify-content-center" style="margin-bottom: 0px;">
             <!--Scatter Plot-->
             <!-- <p class="text-center">(Graph goes here)</p> -->
         </div>
-        <div class="row justify-content-center" style="margin-bottom: 20px;">
+        <div class="row justify-content-center" style="margin-bottom: 1px;">
             <div class="col-4"><p class="zv-h1">Recent News:</p></div>
             <div class="col-6"></div>
         </div>
