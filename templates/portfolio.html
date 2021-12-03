@@ -211,6 +211,9 @@
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
     <script>
+        const jsScatterPlotList = {{scatterplotlist | safe}};
+            
+
         function setupTable() {
             // Add ticker to list of cookies
             // Get string of cookies
@@ -227,22 +230,23 @@
             //cookie_allocation += ",";
             //setCookie("portfolio_allocations", cookie_allocation, 365);
             //alert( cookie_allocation );
-
-            const jsScatterPlotList = {{scatterplotlist}};
+            var data = [];
             
-            jsScatterPlotList.array.forEach(element => {
-                alert(element);
-            });
+            for (var i = 0; i < jsScatterPlotList.length; i++) {
+                alert(jsScatterPlotList[i][1]);
+                var trace = {
+                    x: [jsScatterPlotList[i][1]],
+                    y: [jsScatterPlotList[i][2]],
+                    name: jsScatterPlotList[i][0],
+                    mode: 'markers',
+                    type: 'scatter'
+                };
+                data.push( trace );
+            }
 
-            var trace3 = {
-                x: [1, 2, 3, 4],
-                y: [12, 9, 15, 12],
-                mode: 'markers',
-                type: 'scatter'
-            };
-
-            var data = [trace3];
-
+            // x axis CAGR %
+            // y axis Volatility %
+            
             var layout = {
                 title: 'Risk vs Return Plot',
                 showlegend: true,
