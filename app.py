@@ -333,16 +333,27 @@ def portfolio():
             bad_formatted = ["Risk-Free Rate ", "Time in Market ", "Cumulative Return ", "CAGR﹪", "Max Drawdown ", "MTD ", "3M ", "6M ", "YTD ", "1Y ", "3Y (ann.) ", "5Y (ann.) ", "10Y (ann.) ", "All-time (ann.) ", "Avg. Drawdown "]
 
             for stat in bad_formatted:
-                
-                metrics.loc[stat]["Strategy"] = str(round(float(str(metrics.loc[stat]["Strategy"]).replace(",", ""))  * 100, 1)) + "%"
-                metrics_l.loc[stat]["Strategy"] = str(round(float(str(metrics_l.loc[stat]["Strategy"]).replace(",", ""))  * 100, 1)) + "%"
-                metrics_m.loc[stat]["Strategy"] = str(round(float(str(metrics.loc[stat]["Strategy"]).replace(",", ""))  * 100, 1)) + "%"
-                metrics_h.loc[stat]["Strategy"] = str(round(float(str(metrics.loc[stat]["Strategy"]).replace(",", ""))  * 100, 1)) + "%"
+                try:
+                    metrics.loc[stat]["Strategy"] = str(round(float(str(metrics.loc[stat]["Strategy"]).replace(",", ""))  * 100, 1)) + "%"
+                except:
+                    h = 9
+                try:
+                    metrics_l.loc[stat]["Strategy"] = str(round(float(str(metrics_l.loc[stat]["Strategy"]).replace(",", ""))  * 100, 1)) + "%"
+                except:
+                    h = 9
+                try:
+                    metrics_m.loc[stat]["Strategy"] = str(round(float(str(metrics.loc[stat]["Strategy"]).replace(",", ""))  * 100, 1)) + "%"
+                except:
+                    h = 9
+                try:
+                    metrics_h.loc[stat]["Strategy"] = str(round(float(str(metrics.loc[stat]["Strategy"]).replace(",", ""))  * 100, 1)) + "%"
+                except:
+                    h = 9
                 
 
             # metrics.columns = ["Your Portfolio"]
             # metrics_l.columns = ["Light Crypto"]
-            print(metrics.index)
+            # print(metrics.index)
             stats = [metrics, metrics_l, metrics_m, metrics_h]
             things = ["Cumulative Return ", "Sortino", "Sharpe", "Max Drawdown ", "Recovery Factor", "Serenity Index"]
             stat_table = []
