@@ -138,37 +138,44 @@ def research():
 
 
 
-tickers = []
-allocations = []
+# tickers = []
+# allocations = []
 @app.route('/portfolio', methods= ['GET', 'POST'])
 def portfolio():
     lastPrice = 0
-    global tickers
-    global allocations
+    # global tickers
+    # global allocations
 
     # tickers = ["BTC", "ETH", "AAPL"]
     # allocations = [.40, .30, .30]
     df = pd.DataFrame()
     series = []
     scatter = []
+    stat_table = []
     hello = 0
-    # if request.method == 'POST':
+    tickers = ["MFST", "AAPL"]
+    data_tickers = tickers
+    allocations = [.5,.5]
     if True:
         # if request.form['submitbutton'] == "reset":
-
-        if hello == 1:
-            tickers = []
-            allocations = []
-        else:
+        if request.method == 'POST':
             try:
-                hi
+                
                 ticker = request.form["add_ticker"]
-                tickers.append(ticker)
+                ticker = ticker.replace(" ", '')
+                tickers = ticker.split(',')
+                tickers = [x.upper() for x in tickers]
                 print(tickers)
 
                 allocation = request.form["add_allocation"]
-                allocation = float(allocation)/100
-                allocations.append(allocation)
+                allocations = allocation.replace(" ", '')
+                allocations = allocations.split(',')
+                allocations = [float(x)/100 for x in allocations]
+                print(tickers)
+                print(allocations)
+
+
+                # allocations.append(allocation)
             except:
                 tickers = ["AAPL", "MSFT"]
                 data_tickers = ["AAPL", "MSFT", "BTC", "ETH"]
@@ -212,6 +219,7 @@ def portfolio():
             #Make portfolio for user strategy
             
             stock_dic = {tickers[i]: allocations[i] for i in range(len(tickers))}
+            reg = stock_dic
             print(stock_dic)
             # control = qs.utils.make_index(stock_dic, returns=data, rebalance="1Q")
             # df = pd.DataFrame(control)
@@ -253,7 +261,7 @@ def portfolio():
                 print("Light")
                 # print(new_alloc)
                 stock_dic = {conserv_tickers[i]: new_alloc[i] for i in range(len(conserv_tickers))}
-                print(stock_dic)
+                light = stock_dic
                 # conserv = qs.utils.make_index(stock_dic, returns = data, rebalance="1Q")
 
                 strategy_ = bt.Strategy(
@@ -271,7 +279,7 @@ def portfolio():
 
                 #This is the series data 
                 df_conserv = results._get_series(None).rebase()
-                print(df_conserv)
+                # print(df_conserv)
 
 
                 # df_conserv = pd.DataFrame(conserv)
@@ -312,7 +320,7 @@ def portfolio():
                 # print(new_alloc)
                 
                 stock_dic = {medium_tickers[i]: new_alloc[i] for i in range(len(medium_tickers))}
-                print(stock_dic)
+                medium = stock_dic
                 # medium = qs.utils.make_index(stock_dic, returns = data, rebalance="1Q")
                 strategy_ = bt.Strategy(
                     "Medium Crypto",
@@ -334,7 +342,7 @@ def portfolio():
                 # df_medium.columns = ["Medium Crypto"]
                 # df_medium = get_prices(df_medium, "Medium Crypto")
                 series += pandas_to_highcharts(df_medium)
-                print(df_medium)
+                # print(df_medium)
 
             #Very risky = 2% BTC 2% ETH 2% BNB 2% ADA 2% XRP
             if ("BTC" not in tickers):
@@ -355,7 +363,7 @@ def portfolio():
                 print("Heavy")
                 # print(new_alloc)
                 stock_dic = {heavy_tickers[i]: new_alloc[i] for i in range(len(heavy_tickers))}
-                print(stock_dic)
+                heavy = stock_dic
                 # heavy = qs.utils.make_index(stock_dic, returns = data, rebalance="1Q")
                 strategy_ = bt.Strategy(
                     "Agressive Crypto",
@@ -377,7 +385,7 @@ def portfolio():
                 # df_heavy.columns = ["Agressive Crypto"]
                 # df_heavy = get_prices(df_heavy, "Agressive Crypto")
                 series += pandas_to_highcharts(df_heavy)
-                print(df_heavy)
+                # print(df_heavy)
             
 
             ####################################### SCATTER PLOT ########################################################
@@ -408,8 +416,10 @@ def portfolio():
             ###################################### STATS ####################################################################
             metrics = qs.reports.metrics(df,  display = False)
             metrics_l = qs.reports.metrics(df_conserv,  display = False)
-            metrics_m = qs.reports.metrics(df,  display = False)
-            metrics_h = qs.reports.metrics(df,  display = False)
+            metrics_m = qs.reports.metrics(df_medium,  display = False)
+            # print(metrics_m)
+            metrics_h = qs.reports.metrics(df_heavy,  display = False)
+            # print(metrics_h)
             bad_formatted = ["Risk-Free Rate ", "Time in Market ", "Cumulative Return ", "CAGR﹪", "Max Drawdown ", "MTD ", "3M ", "6M ", "YTD ", "1Y ", "3Y (ann.) ", "5Y (ann.) ", "10Y (ann.) ", "All-time (ann.) ", "Avg. Drawdown "]
 
             for stat in bad_formatted:
@@ -422,11 +432,11 @@ def portfolio():
                 except:
                     h = 9
                 try:
-                    metrics_m.loc[stat]["Strategy"] = str(round(float(str(metrics.loc[stat]["Strategy"]).replace(",", ""))  * 100, 1)) + "%"
+                    metrics_m.loc[stat]["Strategy"] = str(round(float(str(metrics_m.loc[stat]["Strategy"]).replace(",", ""))  * 100, 1)) + "%"
                 except:
                     h = 9
                 try:
-                    metrics_h.loc[stat]["Strategy"] = str(round(float(str(metrics.loc[stat]["Strategy"]).replace(",", ""))  * 100, 1)) + "%"
+                    metrics_h.loc[stat]["Strategy"] = str(round(float(str(metrics_h.loc[stat]["Strategy"]).replace(",", ""))  * 100, 1)) + "%"
                 except:
                     h = 9
                 
@@ -441,21 +451,37 @@ def portfolio():
                 for metric in stats:
                     stat_table.append(metric.loc[thing]["Strategy"])
 
-            print(stat_table)
+            # print(stat_table)
 
 
-            
 
-    table_list = []
-    for i in range(len(tickers)):
-        temp = [tickers[i], str(allocations[i]) + "%"]
-        table_list.append(temp)
-    print(table_list)
-    # json_dict = pandas_to_highcharts(df)
-    print(scatter)
+    ################################ Allocation Table ################################################
+    allocation_table = []
+    for ticker in data_tickers:
+        temp = [ticker]
+        try:
+            temp.append(str(reg[ticker]*100)+"%")
+        except:
+            temp.append("0%")
+        try:
+            temp.append(str(light[ticker]*100)+"%")
+        except:
+            temp.append("0%")
+        try:
+            temp.append(str(medium[ticker]*100)+"%")
+        except:
+            temp.append("0%")
+        try:
+            temp.append(str(heavy[ticker]*100)+"%")
+        except:
+            temp.append("0%")
+        allocation_table.append(temp)
+    print(allocation_table)
+
+
     title = {"text": "Compare Portfolios"}
     chartID = "chart_ID"
-    return render_template("portfolio.html", tickers = table_list, title=title, chartID=chartID, data=series, scatterplotlist = scatter, stats = stat_table)
+    return render_template("portfolio.html", tickers = allocation_table, title=title, chartID=chartID, data=series, scatterplotlist = scatter, stats = stat_table,)
 
 
 
