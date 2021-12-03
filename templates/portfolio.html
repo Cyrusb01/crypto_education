@@ -20,6 +20,7 @@
     </head>
 </html>
     <body style="height:100%; font-family: 'Trebuchet MS', sans-serif; background: var(--color-background)" onload="setupTable();">
+        <script src="../static/js/textToSpeech.js"></script>
         <!-- Navbar -->
         <nav class="navbar navbar-expand navbar-light zv-nav zv-navbar-bg" style="padding-left:20px; padding-right:20px;">
         <div class="container-fluid">
@@ -88,10 +89,10 @@
                         <thead>
                             <tr>
                                 <th scope="col">Ticker</th>
-                                <th scope="col">Your Portfolio</th>
-                                <th scope="col">L Portfolio</th>
-                                <th scope="col">M Portfolio</th>
-                                <th scope="col">A Portfolio</th>
+                                <th scope="col" style="color:#1f77b4;">Your Portfolio</th>
+                                <th scope="col" style="color:#ff7f0e;">L Portfolio</th>
+                                <th scope="col" style="color:#2ca02c;">M Portfolio</th>
+                                <th scope="col" style="color:#d62728;">A Portfolio</th>
                                 <th scope="col"></th>
                             </tr>
                         </thead>
@@ -99,10 +100,10 @@
                             {% for item in tickers %} 
                                 <tr>
                                     <th scope="row">{{item[0]}}</th>
-                                    <td>{{item[1]}}</td>
-                                    <td>{{item[2]}}</td>
-                                    <td>{{item[3]}}</td>
-                                    <td>{{item[4]}}</td>
+                                    <td style="color:#1f77b4;">{{item[1]}}</td>
+                                    <td style="color:#ff7f0e;">{{item[2]}}</td>
+                                    <td style="color:#2ca02c;">{{item[3]}}</td>
+                                    <td style="color:#d62728;">{{item[4]}}</td>
                                     <td></td>
                                 </tr>
                             {% endfor %}
@@ -113,11 +114,9 @@
             </div>
 
             <div class="row form-group" style="width:85%; margin:auto;">
-                <div class="col-md-6" id="scatterPlotDiv" style="padding-right: 20px;">
-                    <!--Scatter Plot Goes Here-->
-                </div>
-                <div class="col-md-6">
-                    <div id={{ chartID|safe }} class="chart" ></div>
+                
+                <div>
+                    <div id={{ chartID|safe }} class="chart" style="height: 550px;"></div>
                     <script type = "text/javascript">
                         var chart_id = {{ chartID|safe }}
                         var title = {{ title|safe }}
@@ -129,8 +128,8 @@
                 </div>
             </div>
 
-            <div class="row" style="width:85%; margin:auto;">
-                <div class="col-md-6">
+            <div class="row" style="width:85%; margin:auto; min-height:500px;">
+                <div class="col-md-6" style="padding-right: 20px;">
                     <!--Statistics Table Goes Here-->
                     <table class="table table-striped">
                         <thead>
@@ -144,35 +143,52 @@
                         </thead>
                         <tbody id="statisticsTable">
                             <tr>
-                                <th scope="row">Return</th>
-                                <td>10%</td>
-                                <td>15%</td>
-                                <td>20%</td>
-                                <td>25%</td>
+                                <th scope="row">Cumulative Return</th>
+                                <td>stats[0]</td>
+                                <td>stats[1]</td>
+                                <td>stats[2]</td>
+                                <td>stats[3]</td>
                             </tr>
                             <tr>
                                 <th scope="row">Sortino Ratio</th>
-                                <td>10%</td>
-                                <td>15%</td>
-                                <td>20%</td>
-                                <td>25%</td>
+                                <td>stats[4]</td>
+                                <td>stats[5]</td>
+                                <td>stats[6]</td>
+                                <td>stats[7]</td>
                             </tr>
                             <tr>
                                 <th scope="row">Sharpe Ratio</th>
-                                <td>10%</td>
-                                <td>15%</td>
-                                <td>20%</td>
-                                <td>25%</td>
+                                <td>stats[8]</td>
+                                <td>stats[9]</td>
+                                <td>stats[10]</td>
+                                <td>stats[11]</td>
                             </tr>
                             <tr>
-                                <th scope="row">Volatility</th>
-                                <td>10%</td>
-                                <td>15%</td>
-                                <td>20%</td>
-                                <td>25%</td>
+                                <th scope="row">Max Drawdown</th>
+                                <td>stats[12]</td>
+                                <td>stats[13]</td>
+                                <td>stats[14]</td>
+                                <td>stats[15]</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Recovery Factor</th>
+                                <td>stats[16]</td>
+                                <td>stats[17]</td>
+                                <td>stats[18]</td>
+                                <td>stats[19]</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Serenity Index</th>
+                                <td>stats[20]</td>
+                                <td>stats[21]</td>
+                                <td>stats[22]</td>
+                                <td>stats[23]</td>
                             </tr>
                         </tbody>
                     </table>
+                </div>
+                <div class="col-md-6" id="scatterPlotDiv">
+                    <!--Scatter Plot Goes Here-->
                 </div>
             </div>
 
@@ -186,7 +202,7 @@
                   <h5 class="modal-title" id="exampleModalLabel">How to use the portfolio tool</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body speak">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ut lectus id massa fringilla convallis sit amet mattis nisi. Suspendisse a eleifend massa, sit amet dignissim tortor. Nunc non arcu quis ligula sollicitudin sodales id quis tellus. Nam at magna et dolor ultricies aliquet. Vestibulum consectetur turpis felis, id dictum nulla finibus sed. Aliquam dapibus tristique ornare. Suspendisse laoreet sed magna id hendrerit. Aliquam dolor metus, commodo pulvinar posuere ut, volutpat sit amet elit. Vivamus consequat libero at magna volutpat venenatis. Praesent commodo molestie iaculis. Curabitur lobortis convallis dolor, eu egestas leo aliquam sit amet.
                 </div>
                 <div class="modal-footer">
@@ -213,7 +229,6 @@
     <script>
         const jsScatterPlotList = {{scatterplotlist | safe}};
             
-
         function setupTable() {
             // Add ticker to list of cookies
             // Get string of cookies
@@ -244,16 +259,13 @@
                 };
                 data.push( trace );
             }
-
-            // x axis CAGR %
-            // y axis Volatility %
             
             var layout = {
                 title: 'Risk vs Return Plot',
                 showlegend: true,
                 paper_bgcolor: 'rgba(0,0,0,0)',
                 plot_bgcolor: 'rgba(0,0,0,0)',
-                legend: {"orientation": "h"},
+                legend: {"orientation": "v"},
                 xaxis: {title: {text: 'CAGR %'},},
                 yaxis: {title: {text: 'Volatility %'}}
             };
