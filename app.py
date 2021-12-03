@@ -8,6 +8,7 @@ from helpers import pandas_to_highcharts, get_crypto_price, get_stock_price, get
 from newsapi import NewsApiClient
 import os
 import quantstats as qs 
+import bt
 qs.extend_pandas()
 
 app = Flask(__name__)
@@ -187,10 +188,11 @@ def portfolio():
         for ticker in data_tickers: 
             got_data = True
             try: #Try and get crypto data 
-                df = get_crypto_price(ticker, "USD", 2000).pct_change()
+                df = get_crypto_price(ticker, "USD", 1000)
             except: #either not a crypto or dont have data for it
                 try:
-                    df = get_stock_price(ticker).pct_change()
+                    df = get_stock_price(ticker)
+                    
                 except:
                     got_data = False
             if(not got_data):
@@ -201,18 +203,36 @@ def portfolio():
                     data = data.join(df, how="outer")
                 except:
                     print("error")
-        
+        data = data.dropna()
             
         series = []
         if len(tickers) != 0:
             series = []
             
             #Make portfolio for user strategy
+            
             stock_dic = {tickers[i]: allocations[i] for i in range(len(tickers))}
-            control = qs.utils.make_index(stock_dic, returns=data, rebalance="1Q")
-            df = pd.DataFrame(control)
-            df.columns = ["Your Strategy"]
-            df = get_prices(df, "Your Strategy")
+            print(stock_dic)
+            # control = qs.utils.make_index(stock_dic, returns=data, rebalance="1Q")
+            # df = pd.DataFrame(control)
+            # df.columns = ["Your Strategy"]
+            # df = get_prices(df, "Your Strategy")
+            strategy_ = bt.Strategy(
+                    "Your Portfolio",
+                    [
+                        bt.algos.RunOnce(),
+                        bt.algos.SelectAll(),
+                        bt.algos.WeighSpecified(**stock_dic),
+                        bt.algos.Rebalance(),
+                    ],
+            )
+
+            test = bt.Backtest(strategy_, data)
+            results = bt.run(test)
+
+            #This is the series data 
+            df = results._get_series(None).rebase()
+            print(df)
 
             # print(df)
             series += pandas_to_highcharts(df)
@@ -220,7 +240,7 @@ def portfolio():
             # print(df)
             
 
-
+            print(data)
             #Generate three different portfolios
 
             #conservative one = 3% into BTC 
@@ -228,15 +248,36 @@ def portfolio():
                 conserv_tickers = tickers.copy()
                 conserv_tickers.append("BTC")
                 new_alloc = allocations.copy()
-                new_alloc = [x-(x*100)*.03 for x in new_alloc]
+                new_alloc = [(x*100-(x*100)*.03)/100 for x in new_alloc]
                 new_alloc.append(.03)
-                
+                print("Light")
+                # print(new_alloc)
                 stock_dic = {conserv_tickers[i]: new_alloc[i] for i in range(len(conserv_tickers))}
-                conserv = qs.utils.make_index(stock_dic, returns = data, rebalance="1Q")
+                print(stock_dic)
+                # conserv = qs.utils.make_index(stock_dic, returns = data, rebalance="1Q")
 
-                df_conserv = pd.DataFrame(conserv)
+                strategy_ = bt.Strategy(
+                    "Light Crypto",
+                    [
+                        bt.algos.RunOnce(),
+                        bt.algos.SelectAll(),
+                        bt.algos.WeighSpecified(**stock_dic),
+                        bt.algos.Rebalance(),
+                    ],
+                )
+
+                test = bt.Backtest(strategy_, data)
+                results = bt.run(test)
+
+                #This is the series data 
+                df_conserv = results._get_series(None).rebase()
+                print(df_conserv)
+
+
+                # df_conserv = pd.DataFrame(conserv)
                 df_conserv.columns = ["Light Crypto"]
-                df_conserv = get_prices(df_conserv, "Light Crypto")
+                # print(df_conserv)
+                # df_conserv = get_prices(df_conserv, "Light Crypto")
                 series += pandas_to_highcharts(df_conserv)
                 # print(df_conserv)
             else:
@@ -263,41 +304,80 @@ def portfolio():
                 medium_tickers.append("BTC")
                 medium_tickers.append("ETH")
                 new_alloc = allocations.copy()
-                new_alloc = [x-(x*100)*.06 for x in new_alloc]
+                new_alloc = [(x*100-(x*100)*.06)/100 for x in new_alloc]
                 new_alloc.append(.03)
                 new_alloc.append(.03)
+                print("Medium")
+                # new_alloc = [45, 45, 5, 5]
+                # print(new_alloc)
                 
                 stock_dic = {medium_tickers[i]: new_alloc[i] for i in range(len(medium_tickers))}
-                medium = qs.utils.make_index(stock_dic, returns = data, rebalance="1Q")
+                print(stock_dic)
+                # medium = qs.utils.make_index(stock_dic, returns = data, rebalance="1Q")
+                strategy_ = bt.Strategy(
+                    "Medium Crypto",
+                    [
+                        bt.algos.RunOnce(),
+                        bt.algos.SelectAll(),
+                        bt.algos.WeighSpecified(**stock_dic),
+                        bt.algos.Rebalance(),
+                    ],
+                )
 
-                df_medium = pd.DataFrame(medium)
-                df_medium.columns = ["Medium Crypto"]
-                df_medium = get_prices(df_medium, "Medium Crypto")
+                test = bt.Backtest(strategy_, data)
+                results = bt.run(test)
+
+                #This is the series data 
+                df_medium = results._get_series(None).rebase()
+
+                # df_medium = pd.DataFrame(medium)
+                # df_medium.columns = ["Medium Crypto"]
+                # df_medium = get_prices(df_medium, "Medium Crypto")
                 series += pandas_to_highcharts(df_medium)
+                print(df_medium)
 
             #Very risky = 2% BTC 2% ETH 2% BNB 2% ADA 2% XRP
             if ("BTC" not in tickers):
                 heavy_tickers = tickers.copy()
                 heavy_tickers.append("BTC")
                 heavy_tickers.append("ETH")
-                # heavy_tickers.append("BNB")
-                # heavy_tickers.append("ADA")
+                heavy_tickers.append("BNB")
+                heavy_tickers.append("ADA")
                 # heavy_tickers.append("XRP")
                 new_alloc = allocations.copy()
-                new_alloc = [x-(x*100)*.1 for x in new_alloc]
-                new_alloc.append(.05)
-                new_alloc.append(.05)
-                # new_alloc.append(.03)
+                print(new_alloc)
+                new_alloc = [(x*100-(x*100)*.1)/100 for x in new_alloc]
+                new_alloc.append(.025)
+                new_alloc.append(.025)
+                new_alloc.append(.025)
+                new_alloc.append(.025)
                 # new_alloc.append(.02)
-                # new_alloc.append(.02)
-                
+                print("Heavy")
+                # print(new_alloc)
                 stock_dic = {heavy_tickers[i]: new_alloc[i] for i in range(len(heavy_tickers))}
-                heavy = qs.utils.make_index(stock_dic, returns = data, rebalance="1Q")
+                print(stock_dic)
+                # heavy = qs.utils.make_index(stock_dic, returns = data, rebalance="1Q")
+                strategy_ = bt.Strategy(
+                    "Agressive Crypto",
+                    [
+                        bt.algos.RunOnce(),
+                        bt.algos.SelectAll(),
+                        bt.algos.WeighSpecified(**stock_dic),
+                        bt.algos.Rebalance(),
+                    ],
+                )
 
-                df_heavy = pd.DataFrame(heavy)
-                df_heavy.columns = ["Agressive Crypto"]
-                df_heavy = get_prices(df_heavy, "Agressive Crypto")
+                test = bt.Backtest(strategy_, data)
+                results = bt.run(test)
+
+                #This is the series data 
+                df_heavy = results._get_series(None).rebase()
+
+                # df_heavy = pd.DataFrame(heavy)
+                # df_heavy.columns = ["Agressive Crypto"]
+                # df_heavy = get_prices(df_heavy, "Agressive Crypto")
                 series += pandas_to_highcharts(df_heavy)
+                print(df_heavy)
             
 
             ####################################### SCATTER PLOT ########################################################
@@ -357,8 +437,8 @@ def portfolio():
             stats = [metrics, metrics_l, metrics_m, metrics_h]
             things = ["Cumulative Return ", "Sortino", "Sharpe", "Max Drawdown ", "Recovery Factor", "Serenity Index"]
             stat_table = []
-            for metric in stats:
-                for thing in things:
+            for thing in things:
+                for metric in stats:
                     stat_table.append(metric.loc[thing]["Strategy"])
 
             print(stat_table)

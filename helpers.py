@@ -5,6 +5,7 @@ import requests
 import os
 import yfinance as yf
 
+
 # def daily_price_historical(symbol, comparison_symbol, all_data=True, limit=1, aggregate=1, exchange=''):
 #     url = 'https://min-api.cryptocompare.com/data/histoday?fsym={}&tsym={}&limit={}&aggregate={}'\
 #             .format(symbol.upper(), comparison_symbol.upper(), limit, aggregate)
@@ -49,7 +50,7 @@ def get_stock_price(symbol):
     today = datetime.now()
     # print(now)
     today = today.strftime('%Y-%m-%d')
-    start = datetime.fromisoformat(today) - timedelta(2000)
+    start = datetime.fromisoformat(today) - timedelta(1000)
     start = start.strftime('%Y-%m-%d')
     
     # print(now_wo_seconds)

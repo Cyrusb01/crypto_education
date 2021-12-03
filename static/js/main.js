@@ -23,12 +23,12 @@ $(document).ready(function() {
 		legend: {
 			enabled: true
 		},
-		plotOptions: {
-            series: {
-                compare: 'percent',
-                showInNavigator: true
-            }
-        },
+		// plotOptions: {
+        //     series: {
+        //         compare: 'percent',
+        //         showInNavigator: true
+        //     }
+        // },
 		// yAxis: {
         //     labels: {
         //         formatter: function () {
