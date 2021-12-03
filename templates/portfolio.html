@@ -239,7 +239,8 @@
                     y: [jsScatterPlotList[i][2]],
                     name: jsScatterPlotList[i][0],
                     mode: 'markers',
-                    type: 'scatter'
+                    type: 'scatter',
+                    marker: { size: 12 }
                 };
                 data.push( trace );
             }
@@ -252,7 +253,9 @@
                 showlegend: true,
                 paper_bgcolor: 'rgba(0,0,0,0)',
                 plot_bgcolor: 'rgba(0,0,0,0)',
-                legend: {"orientation": "h"}
+                legend: {"orientation": "h"},
+                xaxis: {title: {text: 'CAGR %'},},
+                yaxis: {title: {text: 'Volatility %'}}
             };
 
 
