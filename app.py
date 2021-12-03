@@ -33,59 +33,59 @@ def learning():
 @app.route("/research", methods=["GET", "POST"])
 def research():
     ticker = "BTC"
+
+
     if request.method == "POST":
         ticker = request.form["ticker"]
 
-    ticker_df = pd.read_csv("Coins.csv")
-    ticker_df = ticker_df.set_index("Tickers")
-    # print(ticker_df)
+        ################################## FIND COIN NAME/INFO ############################################
+        ticker_df = pd.read_csv("Coins.csv")
+        ticker_df = ticker_df.set_index("Tickers")
+        # print(ticker_df)
 
-    ticker = ticker.upper()
-    coin_name = ticker_df.loc[ticker]["Name"]
-    coin_link = ticker_df.loc[ticker]["Link"]
-    coin_logo = ticker_df.loc[ticker]["Logo"]
-    coin_description = ticker_df.loc[ticker]["Description"]
+        ticker = ticker.upper()
+        coin_name = ticker_df.loc[ticker]["Name"]
+        coin_link = ticker_df.loc[ticker]["Link"]
+        coin_logo = ticker_df.loc[ticker]["Logo"]
+        coin_description = ticker_df.loc[ticker]["Description"]
 
+        
+
+        ################################## DOWNLOAD DATA ####################################################
+        data = yf.download(ticker + "-USD", start="2017-01-01", end="2021-11-01")
+        df = pd.DataFrame(data)
+        df = df[["Close"]]
+        df.columns = [ticker]
+        json_dict = pandas_to_highcharts(df)
+
+        ##################################################### GET NEWS ##########################################################
+        news_api_key = os.getenv("NEWS_API_KEY")
+        newsapi = NewsApiClient(api_key=news_api_key)
+        sources = newsapi.get_sources()
+        top_headlines = newsapi.get_everything(
+            q=ticker,
+            sources='decrypt,bloomberg,forbes,the-block,coindesk,google-news',
+            #   category='business',
+            language="en",
+            #   country='us',
+            from_param="2021-11-20",
+            to="2021-12-03",
+            sort_by="relevancy",
+            #   page = 1
+        )
+        sources = []
+        headlines = []
+        urls = []
+        for i in range(3):
+            article = top_headlines["articles"][i]
+
+            sources.append(article["source"]["name"])
+            headlines.append(article["title"])
+            urls.append(article["url"])
+    
+    ############################################### SEND REQUESTS #############################################################
     title = {"text": ticker}
     chartID = "chart_ID"
-
-    # Downloading the data
-    data = yf.download(ticker + "-USD", start="2017-01-01", end="2021-11-01")
-    df = pd.DataFrame(data)
-    df = df[["Close"]]
-    json_dict = pandas_to_highcharts(df)
-
-    # TESTING - Z
-    # print(df.iloc[-1])
-    # END TESTING
-
-    ##################################################### GET NEWS ##########################################################
-    news_api_key = os.getenv("NEWS_API_KEY")
-    # print(news_api_key)
-    newsapi = NewsApiClient(api_key=news_api_key)
-    sources = newsapi.get_sources()
-    # print(sources)
-    top_headlines = newsapi.get_everything(
-        q=ticker,
-        sources='decrypt,bloomberg,forbes,the-block,coindesk,google-news',
-        #   category='business',
-        language="en",
-        #   country='us',
-        from_param="2021-11-01",
-        to="2021-29-10",
-        sort_by="relevancy",
-        #   page = 1
-    )
-    sources = []
-    headlines = []
-    urls = []
-    for i in range(3):
-        article = top_headlines["articles"][i]
-
-        sources.append(article["source"]["name"])
-        headlines.append(article["title"])
-        urls.append(article["url"])
-    # print(urls[2])
     if request.method == "POST":
         return render_template(
             "tickerlearning.html",
@@ -103,13 +103,39 @@ def research():
             url2 = urls[1],
             source3 = sources[2],
             headline3  = headlines[2],
-            url3 = urls[2]
+            url3 = urls[2],
+            logo = coin_logo,
+            link = coin_link
         )
         
     else:
+        data_series = []
+        data = yf.download("BTC-USD", start="2017-01-01", end="2021-11-01")
+        df = pd.DataFrame(data)
+        df = df[["Close"]]
+        df.columns = ["Bitcoin"]
+        df = df.pct_change()
+        df = get_prices(df, "Bitcoin")
+        btc_ret = "$" + str(round(df.iloc[-1]["Bitcoin"]))
+        print(type(btc_ret))
+        data_series += pandas_to_highcharts(df)
+        #gold 
+        data = yf.download("GLD", start="2017-01-01", end="2021-11-01")
+        df = pd.DataFrame(data)
+        df = df[["Close"]]
+        df.columns = ["Gold"]
+        df = df.pct_change()
+        df = get_prices(df, "Gold")
+        gld_ret = "$" + str(round(df.iloc[-1]["Gold"]))
+        data_series += pandas_to_highcharts(df)
+
+        
         return render_template(
-            "research.html", ticker=ticker, title=title, chartID=chartID, data=json_dict
+            "research.html", ticker=ticker, title=title, chartID=chartID, data=data_series, btc_ret = btc_ret, gld_ret = gld_ret
         )
+
+
+
 
 tickers = []
 allocations = []
@@ -124,14 +150,17 @@ def portfolio():
     df = pd.DataFrame()
     series = []
     scatter = []
-    if request.method == 'POST':
-        if request.form['submitbutton'] == "reset":
+    hello = 0
+    # if request.method == 'POST':
+    if True:
+        # if request.form['submitbutton'] == "reset":
+
+        if hello == 1:
             tickers = []
             allocations = []
         else:
             try:
-                
-
+                hi
                 ticker = request.form["add_ticker"]
                 tickers.append(ticker)
                 print(tickers)
@@ -139,35 +168,9 @@ def portfolio():
                 allocation = request.form["add_allocation"]
                 allocation = float(allocation)/100
                 allocations.append(allocation)
-
-                
-                # print(ticker)
-                # tickers = request.cookies.get("portfolio_tickers")
-                # if tickers == None:
-                #     tickers = [ticker]
-                # else:
-                #     tickers.append(ticker)
-                
-                # print(tickers)
-
-                # resp = make_response(render_template("portfolio.html"))
-                # print("here")
-                # resp.set_cookie("portfolio_tickers", "BTC,ETH")
-                # print("here")
-
-                # tickers = request.cookies.get("portfolio_tickers")
-                # print(tickers)
-                # # tickers = tickers.split(',')
-                # # tickers = [x for x in tickers if x != '']
-                
-                # allocations = request.cookies.get("portfolio_allocations").split(',')
-                # allocations = [float(x) for x in allocations if x != '']
-
-                # print(tickers)
-                # print(allocations)
             except:
                 tickers = ["AAPL", "MSFT"]
-                data_tickers = ["AAPL", "MSFT", "BTC", "ETH", "BNB", "ADA", "XRP"]
+                data_tickers = ["AAPL", "MSFT", "BTC", "ETH"]
                 allocations = [.5, .5]
 
         data_tickers = tickers.copy()
@@ -197,7 +200,7 @@ def portfolio():
         
         
         
-        print(data)
+        # print(data)
         # data_new = data.dropna(inplace = True)
         # print(data_new)
             
@@ -212,7 +215,7 @@ def portfolio():
             df.columns = ["Your Strategy"]
             df = get_prices(df, "Your Strategy")
 
-            print(df)
+            # print(df)
             series += pandas_to_highcharts(df)
 
             # print(df)
@@ -236,7 +239,7 @@ def portfolio():
                 df_conserv.columns = ["Light Crypto"]
                 df_conserv = get_prices(df_conserv, "Light Crypto")
                 series += pandas_to_highcharts(df_conserv)
-                print(df_conserv)
+                # print(df_conserv)
             else:
                 conserv_tickers = tickers.copy()
                 # conserv_tickers.append("BTC")
@@ -253,12 +256,14 @@ def portfolio():
                 df_conserv.columns = ["Light Crypto"]
                 df_conserv = get_prices(df_conserv, "Light Crypto")
                 series += pandas_to_highcharts(df_conserv)
-                print(df_conserv)
+                # print(df_conserv)
 
             #More involved = 3% BTC 3% ETH
 
             #Very risky = 2% BTC 2% ETH 2% BNB 2% ADA 2% XRP
             
+
+            ####################################### SCATTER PLOT ########################################################
             df = df.pct_change()
             df.index = pd.to_datetime(df.index, unit = 'ms')
             port_return = df.cagr()
@@ -271,7 +276,34 @@ def portfolio():
             
             scatter = [["Your Portfolio", port_return, port_volatility], ["Light Crypto", conserv_return, conserv_volatility] ] 
 
+            
+            
+            ###################################### STATS ####################################################################
+            metrics = qs.reports.metrics(df,  display = False)
+            metrics_l = qs.reports.metrics(df_conserv,  display = False)
+            # metrics_m = qs.reports.metrics(df,  display = False)
+            # metrics_a = qs.reports.metrics(df,  display = False)
+            bad_formatted = ["Risk-Free Rate ", "Time in Market ", "Cumulative Return ", "CAGR﹪", "Max Drawdown ", "MTD ", "3M ", "6M ", "YTD ", "1Y ", "3Y (ann.) ", "5Y (ann.) ", "10Y (ann.) ", "All-time (ann.) ", "Avg. Drawdown "]
 
+            for stat in bad_formatted:
+                
+                metrics.loc[stat]["Strategy"] = str(round(float(str(metrics.loc[stat]["Strategy"]).replace(",", ""))  * 100, 1)) + "%"
+                metrics_l.loc[stat]["Strategy"] = str(round(float(str(metrics_l.loc[stat]["Strategy"]).replace(",", ""))  * 100, 1)) + "%"
+                # metrics.loc[stat]["Strategy"] = str(round(float(str(metrics.loc[stat]["Strategy"]).replace(",", ""))  * 100, 1)) + "%"
+                # metrics.loc[stat]["Strategy"] = str(round(float(str(metrics.loc[stat]["Strategy"]).replace(",", ""))  * 100, 1)) + "%"
+                
+
+            # metrics.columns = ["Your Portfolio"]
+            # metrics_l.columns = ["Light Crypto"]
+            print(metrics.index)
+            stats = [metrics, metrics_l]
+            things = ["Cumulative Return ", "Sortino", "Sharpe", "Max Drawdown ", "Recovery Factor", "Serenity Index"]
+            stat_table = []
+            for metric in stats:
+                for thing in things:
+                    stat_table.append(metric.loc[thing]["Strategy"])
+
+            print(stat_table)
 
 
             
