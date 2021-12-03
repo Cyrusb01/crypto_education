@@ -176,6 +176,10 @@ def portfolio():
         data_tickers = tickers.copy()
         if "BTC" not in data_tickers:
             data_tickers.append("BTC")
+            data_tickers.append("ETH")
+            data_tickers.append("BNB")
+            data_tickers.append("ADA")
+            # data_tickers.append("XRP")
         
         #get Data for these
 
@@ -198,11 +202,6 @@ def portfolio():
                 except:
                     print("error")
         
-        
-        
-        # print(data)
-        # data_new = data.dropna(inplace = True)
-        # print(data_new)
             
         series = []
         if len(tickers) != 0:
@@ -259,45 +258,92 @@ def portfolio():
                 # print(df_conserv)
 
             #More involved = 3% BTC 3% ETH
+            if ("BTC" not in tickers):
+                medium_tickers = tickers.copy()
+                medium_tickers.append("BTC")
+                medium_tickers.append("ETH")
+                new_alloc = allocations.copy()
+                new_alloc = [x-(x*100)*.06 for x in new_alloc]
+                new_alloc.append(.03)
+                new_alloc.append(.03)
+                
+                stock_dic = {medium_tickers[i]: new_alloc[i] for i in range(len(medium_tickers))}
+                medium = qs.utils.make_index(stock_dic, returns = data, rebalance="1Q")
+
+                df_medium = pd.DataFrame(medium)
+                df_medium.columns = ["Medium Crypto"]
+                df_medium = get_prices(df_medium, "Medium Crypto")
+                series += pandas_to_highcharts(df_medium)
 
             #Very risky = 2% BTC 2% ETH 2% BNB 2% ADA 2% XRP
+            if ("BTC" not in tickers):
+                heavy_tickers = tickers.copy()
+                heavy_tickers.append("BTC")
+                heavy_tickers.append("ETH")
+                # heavy_tickers.append("BNB")
+                # heavy_tickers.append("ADA")
+                # heavy_tickers.append("XRP")
+                new_alloc = allocations.copy()
+                new_alloc = [x-(x*100)*.1 for x in new_alloc]
+                new_alloc.append(.05)
+                new_alloc.append(.05)
+                # new_alloc.append(.03)
+                # new_alloc.append(.02)
+                # new_alloc.append(.02)
+                
+                stock_dic = {heavy_tickers[i]: new_alloc[i] for i in range(len(heavy_tickers))}
+                heavy = qs.utils.make_index(stock_dic, returns = data, rebalance="1Q")
+
+                df_heavy = pd.DataFrame(heavy)
+                df_heavy.columns = ["Agressive Crypto"]
+                df_heavy = get_prices(df_heavy, "Agressive Crypto")
+                series += pandas_to_highcharts(df_heavy)
             
 
             ####################################### SCATTER PLOT ########################################################
             df = df.pct_change()
             df.index = pd.to_datetime(df.index, unit = 'ms')
             port_return = df.cagr()
-            
             port_volatility = df.volatility()
             
             df_conserv = df_conserv.pct_change()
             df_conserv.index = pd.to_datetime(df_conserv.index, unit = 'ms')
             conserv_return = df_conserv.cagr()
             conserv_volatility = df_conserv.volatility()
+
+            df_medium = df_medium.pct_change()
+            df_medium.index = pd.to_datetime(df_medium.index, unit = 'ms')
+            medium_return = df_medium.cagr()
+            medium_volatility = df_medium.volatility()
+
+            df_heavy = df_heavy.pct_change()
+            df_heavy.index = pd.to_datetime(df_heavy.index, unit = 'ms')
+            heavy_return = df_heavy.cagr()
+            heavy_volatility = df_heavy.volatility()
             
-            scatter = [["Your Portfolio", port_return[0]*100, port_volatility[0]*100], ["Light Crypto", conserv_return[0]*100, conserv_volatility[0]*100] ] 
+            scatter = [["Your Portfolio", port_return[0]*100, port_volatility[0]*100], ["Light Crypto", conserv_return[0]*100, conserv_volatility[0]*100], ["Medium Crypto", medium_return[0]*100, medium_volatility[0]*100], ["Agressive Crypto", heavy_return[0]*100, heavy_volatility[0]*100]] 
 
             
             
             ###################################### STATS ####################################################################
             metrics = qs.reports.metrics(df,  display = False)
             metrics_l = qs.reports.metrics(df_conserv,  display = False)
-            # metrics_m = qs.reports.metrics(df,  display = False)
-            # metrics_a = qs.reports.metrics(df,  display = False)
+            metrics_m = qs.reports.metrics(df,  display = False)
+            metrics_h = qs.reports.metrics(df,  display = False)
             bad_formatted = ["Risk-Free Rate ", "Time in Market ", "Cumulative Return ", "CAGR﹪", "Max Drawdown ", "MTD ", "3M ", "6M ", "YTD ", "1Y ", "3Y (ann.) ", "5Y (ann.) ", "10Y (ann.) ", "All-time (ann.) ", "Avg. Drawdown "]
 
             for stat in bad_formatted:
                 
                 metrics.loc[stat]["Strategy"] = str(round(float(str(metrics.loc[stat]["Strategy"]).replace(",", ""))  * 100, 1)) + "%"
                 metrics_l.loc[stat]["Strategy"] = str(round(float(str(metrics_l.loc[stat]["Strategy"]).replace(",", ""))  * 100, 1)) + "%"
-                # metrics.loc[stat]["Strategy"] = str(round(float(str(metrics.loc[stat]["Strategy"]).replace(",", ""))  * 100, 1)) + "%"
-                # metrics.loc[stat]["Strategy"] = str(round(float(str(metrics.loc[stat]["Strategy"]).replace(",", ""))  * 100, 1)) + "%"
+                metrics_m.loc[stat]["Strategy"] = str(round(float(str(metrics.loc[stat]["Strategy"]).replace(",", ""))  * 100, 1)) + "%"
+                metrics_h.loc[stat]["Strategy"] = str(round(float(str(metrics.loc[stat]["Strategy"]).replace(",", ""))  * 100, 1)) + "%"
                 
 
             # metrics.columns = ["Your Portfolio"]
             # metrics_l.columns = ["Light Crypto"]
             print(metrics.index)
-            stats = [metrics, metrics_l]
+            stats = [metrics, metrics_l, metrics_m, metrics_h]
             things = ["Cumulative Return ", "Sortino", "Sharpe", "Max Drawdown ", "Recovery Factor", "Serenity Index"]
             stat_table = []
             for metric in stats:
@@ -318,7 +364,7 @@ def portfolio():
     print(scatter)
     title = {"text": "Compare Portfolios"}
     chartID = "chart_ID"
-    return render_template("portfolio.html", tickers = table_list, title=title, chartID=chartID, data=series, scatterplotlist = scatter)
+    return render_template("portfolio.html", tickers = table_list, title=title, chartID=chartID, data=series, scatterplotlist = scatter, stats = stat_table)
 
 
 
