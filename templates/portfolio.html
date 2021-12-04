@@ -19,8 +19,7 @@
         <title>CryptoWorld</title>
     </head>
 </html>
-    <body style="height:100%; font-family: 'Trebuchet MS', sans-serif; background: var(--color-background)" onload="setupTable();">
-        <script src="../static/js/textToSpeech.js"></script>
+    <body style="height:100%; background: var(--color-background)" onload="setupTable();">
         <!-- Navbar -->
         <nav class="navbar navbar-expand navbar-light zv-nav zv-navbar-bg" style="padding-left:20px; padding-right:20px;">
         <div class="container-fluid">
@@ -28,7 +27,7 @@
                 CryptoWorld
             </a>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav centered">
+                <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="/home" style="font-size:23px; padding-left: 20px; padding-right: 20px;">Home</a>
                     </li>
@@ -204,7 +203,6 @@
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body speak">
-                    <script src="../static/js/textToSpeech.js"></script>
                      To use the portfolio tool, enter in all the stocks you own or want to test, in a comma seperated list, and then input their allocation percent in the other input box. Ex. AAPL,GOOG,MSFT 20,40,40. The tool will then track the performance of your portfolio from the last 1000 days along with generating three new portfolios for you. The three portfolios will show how adding different amounts of crypto can affect the perfomance of your investments.
                 </div>
                 <div class="modal-footer">
@@ -218,7 +216,7 @@
             <!-- Copyright -->
             <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
               © 2021 Copyright:
-              <a class="text-dark">CryptoWorld.com</a>
+              <a class="text-dark">CryptoWorld</a>
             </div>
             <!-- Copyright -->
           </footer>
@@ -227,7 +225,7 @@
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-
+    <script src="../static/js/textToSpeech.js"></script>
     <script>
         const jsScatterPlotList = {{scatterplotlist | safe}};
             

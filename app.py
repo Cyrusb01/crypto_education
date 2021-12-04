@@ -397,7 +397,7 @@ def portfolio():
                 heavy = stock_dic
                 # heavy = qs.utils.make_index(stock_dic, returns = data, rebalance="1Q")
                 strategy_ = bt.Strategy(
-                    "Agressive Crypto",
+                    "Aggressive Crypto",
                     [
                         bt.algos.RunOnce(),
                         bt.algos.SelectAll(),
@@ -440,7 +440,7 @@ def portfolio():
             heavy_return = df_heavy.cagr()
             heavy_volatility = df_heavy.volatility()
             
-            scatter = [["Your Portfolio", port_return[0]*100, port_volatility[0]*100], ["Light Crypto", conserv_return[0]*100, conserv_volatility[0]*100], ["Medium Crypto", medium_return[0]*100, medium_volatility[0]*100], ["Agressive Crypto", heavy_return[0]*100, heavy_volatility[0]*100]] 
+            scatter = [["Your Portfolio", port_return[0]*100, port_volatility[0]*100], ["Light Crypto", conserv_return[0]*100, conserv_volatility[0]*100], ["Medium Crypto", medium_return[0]*100, medium_volatility[0]*100], ["Aggressive Crypto", heavy_return[0]*100, heavy_volatility[0]*100]] 
 
             
             

@@ -12,7 +12,7 @@ document.querySelectorAll('.speak').forEach(para => {
     const text = para.textContent;
     speaker.classList = ['speaker'];
     speaker.style.cursor = "pointer";
-    speaker.innerHTML = '&#128264';
+    speaker.innerHTML = '<i class="bi bi-megaphone-fill"></i>';
     speaker.addEventListener('click', () => say(text));
     para.appendChild(speaker);
 });

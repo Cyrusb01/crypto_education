@@ -27,7 +27,7 @@
                 CryptoWorld
             </a>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav centered">
+                <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="/home" style="font-size:23px; padding-left: 20px; padding-right: 20px;">Home</a>
                     </li>
@@ -73,7 +73,7 @@
             <div class="col-4">
                 <p class="zv-h1" style="display:inline;">What is {{coin_name | safe}}?</p>
                 <!-- <img src={{logo}} style="height: 80px; display:inline;" > -->
-                <p class="zv-text"> {{ coin_description | safe }} </p>
+                <p class="zv-text speak"> {{ coin_description | safe }} </p>
                 <!-- <img src={{logo}}> -->
                 <a class= "zv-text" href={{link}}> Link to {{coin_name}} Website </a>
             </div>
@@ -138,7 +138,7 @@
         <!-- Copyright -->
         <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
           © 2021 Copyright:
-          <a class="text-dark">CryptoWorld.com</a>
+          <a class="text-dark">CryptoWorld</a>
         </div>
         <!-- Copyright -->
       </footer>
@@ -146,9 +146,7 @@
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
-    <script>
-        
-    </script>
+    <script src="../static/js/textToSpeech.js"></script>
   </body>
 </html>
 

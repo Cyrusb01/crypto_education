@@ -52,7 +52,7 @@ if ("webkitSpeechRecognition" in window) {
     let inputElement = para.querySelector('input');
     let micIcon = document.createElement('span');
 
-    micIcon.innerHTML = '&#127908';
+    micIcon.innerHTML = '<i class="bi bi-mic-fill"></i>';
     micIcon.style.cursor = 'pointer';
     micIcon.style.opacity = '30%';
     micIcon.style.userSelect = 'none';

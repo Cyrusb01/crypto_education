@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" style="height:100%; " class="dark-mode">
+<html lang="en" style="height:100%; " class="light-mode">
     <head>
     <!-- Required meta tags -->
         <meta charset="utf-8">
@@ -18,7 +18,7 @@
 
         <title>CryptoWorld</title>
     </head>
-    <body style="height:100%; font-family: 'Trebuchet MS', sans-serif; background: var(--color-background); ">
+    <body style="height:100%;  background: var(--color-background); ">
       
       <!-- Navbar -->
         <nav class="navbar navbar-expand navbar-light zv-nav zv-navbar-bg" style="padding-left:20px; padding-right:20px; margin-bottom: 0px;">
@@ -87,53 +87,32 @@
         <!-- TradingView Widget END -->   
     </div>
     <div class="row justify-content-center" style="margin-bottom: 20px; height: 70vh;">
-        <div class="col-auto" style="display: flex; align-items: center;">
-            <img class="coin" style="margin-right: 40px; height: 300px" src="../static/bitcoin.png" >
-            <p class="zv-h1 text-center">cryptoworld</p>
-            <p class="zv-text text-center" style="margin-left: 15px;">learn how crypto can benefit your portfolio</p>
+        <div class="col-md-6" style="display: flex; align-items: center;">
+            <img class="coin" style="margin-left: auto; margin-right:10%; height: 300px" src="../static/bitcoin.png" >
+        </div>
+        <div class="col-md-6" style="display: flex; align-items: center;">
+            <div>
+                <p class="zv-h1" style="font-size: 60px;">CryptoWorld</p>
+                <p class="zv-text" style="width: 100%; margin-left: 20%; font-size: 25px;">Learn how crypto can benefit your portfolio.</p>
+            </div>
         </div>
 
     </div>
       <!-- Body Stuff Ends Here -->
       
-      <footer class="fixed-bottom bg-light text-center text-lg-start">
-        <!-- Copyright -->
-        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
-          © 2021 Copyright:
-          <a class="text-dark">CryptoWorld.com</a>
-        </div>
-        <!-- Copyright -->
-      </footer>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
-    <script>
-        function setTheme( newTheme ) {
-            localStorage.setItem( 'theme', newTheme );
-            document.documentElement.className = newTheme;
-        }
-        
-        function toggleTheme() {
-            if ( localStorage.getItem('theme') === 'light-mode' ) {
-                setTheme( 'dark-mode' ) ;
-                document.getElementById("themeToggle").className = "bi bi-sun";
-            } else {
-                setTheme( 'light-mode' );
-                document.getElementById("themeToggle").className = "bi bi-moon";
-            }
-        }
-        
-        (function () {
-            if ( localStorage.getItem('theme') === 'light-mode' ) {
-                setTheme( 'light-mode' ) ;
-                document.getElementById("themeToggle").className = "bi bi-moon";
-            } else {
-                setTheme( 'dark-mode' );
-                document.getElementById("themeToggle").className = "bi bi-sun";
-            }
-        })();
-    </script>
+    <script src="../static/js/textToSpeech.js"></script>
   </body>
+  <footer class="bg-light text-center text-lg-start" style="position: absolute; bottom: 0; width: 100%;">
+    <!-- Copyright -->
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
+      © 2021 Copyright:
+      <a class="text-dark">CryptoWorld</a>
+    </div>
+    <!-- Copyright -->
+  </footer>
 </html>
 
