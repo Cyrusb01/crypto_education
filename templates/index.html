@@ -18,7 +18,7 @@
 
         <title>CryptoWorld</title>
     </head>
-    <body style="height:100%; font-family: 'Trebuchet MS', sans-serif; background: var(--color-background)">
+    <body style="height:100%; font-family: 'Trebuchet MS', sans-serif; background: var(--color-background); ">
       
       <!-- Navbar -->
         <nav class="navbar navbar-expand navbar-light zv-nav zv-navbar-bg" style="padding-left:20px; padding-right:20px; margin-bottom: 0px;">
@@ -27,9 +27,9 @@
                     CryptoWorld
                 </a>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav centered">
+                    <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="/home" style="font-size:23px; padding-left: 20px; padding-right: 20px;">Home</a>
+                            <a class="nav-link" href="/home" style="font-size:23px; padding-left: 20px; padding-right: 20px; color: var(--color-accent);">Home</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/research" style="font-size:23px; padding-left: 20px; padding-right: 20px;">Research</a>
@@ -86,14 +86,13 @@
         </div>
         <!-- TradingView Widget END -->   
     </div>
-    <div class="row justify-content-center" style="margin-bottom: 20px;">
-        <div class="col-md-6">
-            <img style="display: block; margin-left: auto;" src="../static/bitcoinnetwork.png" >
-        </div>
-        <div class="col-md-6">
+    <div class="row justify-content-center" style="margin-bottom: 20px; height: 70vh;">
+        <div class="col-auto" style="display: flex; align-items: center;">
+            <img class="coin" style="margin-right: 40px; height: 300px" src="../static/bitcoin.png" >
             <p class="zv-h1 text-center">cryptoworld</p>
-            <p class="zv-text text-center">learn how crypto can benefit your portfolio</p>
+            <p class="zv-text text-center" style="margin-left: 15px;">learn how crypto can benefit your portfolio</p>
         </div>
+
     </div>
       <!-- Body Stuff Ends Here -->
       
