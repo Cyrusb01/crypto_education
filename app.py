@@ -114,8 +114,8 @@ def research():
                 urls.append(article["url"])
         except:
             sources = ["", "", ""]
-        headlines = ["", "", ""]
-        urls = ["", "", ""]
+            headlines = ["", "", ""]
+            urls = ["", "", ""]
     ############################################### SEND REQUESTS #############################################################
     title = {"text": ticker}
     chartID = "chart_ID"
