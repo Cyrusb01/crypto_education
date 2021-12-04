@@ -34,7 +34,7 @@ def learning():
 @app.route("/research", methods=["GET", "POST"])
 def research():
     ticker = "BTC"
-
+    print("here")
 
     if request.method == "POST":
         ticker = request.form["ticker"]
@@ -105,13 +105,17 @@ def research():
         sources = []
         headlines = []
         urls = []
-        for i in range(3):
-            article = top_headlines["articles"][i]
+        try:
+            for i in range(3):
+                article = top_headlines["articles"][i]
 
-            sources.append(article["source"]["name"])
-            headlines.append(article["title"])
-            urls.append(article["url"])
-    
+                sources.append(article["source"]["name"])
+                headlines.append(article["title"])
+                urls.append(article["url"])
+        except:
+            sources = ["", "", ""]
+            headlines = ["", "", ""]
+            urls = ["", "", ""]
     ############################################### SEND REQUESTS #############################################################
     title = {"text": ticker}
     chartID = "chart_ID"

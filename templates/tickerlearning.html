@@ -59,8 +59,13 @@
                     <a href="/research" class="text-center" style="margin-right: 10%;">
                         <button class="btn btn-primary" type="button"><i class="bi bi-arrow-left"></i></button>
                     </a>
-                    <input type="text" class="form-control" placeholder="Search for Crypto" aria-label="Enter Ticker" aria-describedby="button-addon2" name="ticker">
-                    <button class="btn btn-primary" type="button" id="button-addon2"><i class="bi bi-search"></i></button>
+
+                    <form method = "POST"> 
+                        <div class="input-group mb-3" style="width: 75%; margin: auto;">
+                            <input type="text" class="form-control" placeholder="Search for Crypto" aria-label="Enter Ticker" aria-describedby="button-addon2" name = "ticker">
+                            <button class="btn btn-primary" type="submit" id="button-addon2"><i class="bi bi-search"></i></button>
+                        </div>
+                    </form>
                 </div>
             </form>
         </div>
