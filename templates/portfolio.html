@@ -64,6 +64,7 @@
                 <!-- <div class="col-md-6"> -->
 
                     <p class="zv-h2" style="text-align: center;">Your Current Investments</p>
+                    <h1 class="cb-h1" style="text-align: center;">{{inval}}</h1>
 
                     <form method="POST">
                         <div class="row justify-content-center" style="margin-bottom: 10px;">
@@ -203,7 +204,8 @@
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body speak">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ut lectus id massa fringilla convallis sit amet mattis nisi. Suspendisse a eleifend massa, sit amet dignissim tortor. Nunc non arcu quis ligula sollicitudin sodales id quis tellus. Nam at magna et dolor ultricies aliquet. Vestibulum consectetur turpis felis, id dictum nulla finibus sed. Aliquam dapibus tristique ornare. Suspendisse laoreet sed magna id hendrerit. Aliquam dolor metus, commodo pulvinar posuere ut, volutpat sit amet elit. Vivamus consequat libero at magna volutpat venenatis. Praesent commodo molestie iaculis. Curabitur lobortis convallis dolor, eu egestas leo aliquam sit amet.
+                    <script src="../static/js/textToSpeech.js"></script>
+                     To use the portfolio tool, enter in all the stocks you own or want to test, in a comma seperated list, and then input their allocation percent in the other input box. Ex. AAPL,GOOG,MSFT 20,40,40. The tool will then track the performance of your portfolio from the last 1000 days along with generating three new portfolios for you. The three portfolios will show how adding different amounts of crypto can affect the perfomance of your investments.
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

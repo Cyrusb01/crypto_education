@@ -37,6 +37,12 @@
     font-weight: 700;
 }
 
+.cb-h1 {
+    color: red;
+    font-size: 40px;
+    font-weight: 700;
+}
+
 .zv-text {
     color: var(--font-color);
     font-size: 20px;

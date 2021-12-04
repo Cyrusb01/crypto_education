@@ -45,12 +45,40 @@ def research():
         # print(ticker_df)
 
         ticker = ticker.upper()
-        coin_name = ticker_df.loc[ticker]["Name"]
-        coin_link = ticker_df.loc[ticker]["Link"]
-        coin_logo = ticker_df.loc[ticker]["Logo"]
-        coin_description = ticker_df.loc[ticker]["Description"]
+        valid_ticker = True
+        try:
+            coin_name = ticker_df.loc[ticker]["Name"]
+            coin_link = ticker_df.loc[ticker]["Link"]
+            coin_logo = ticker_df.loc[ticker]["Logo"]
+            coin_description = ticker_df.loc[ticker]["Description"]
+        except:
+            title = {"text": "Bitcoin Vs. Gold"}
+            chartID = "chart_ID"
+            data_series = []
+            data = yf.download("BTC-USD", start="2017-01-01", end="2021-11-01")
+            df = pd.DataFrame(data)
+            df = df[["Close"]]
+            df.columns = ["Bitcoin"]
+            df = df.pct_change()
+            df = get_prices(df, "Bitcoin")
+            btc_ret = "$" + str(round(df.iloc[-1]["Bitcoin"]))
+            print(type(btc_ret))
+            data_series += pandas_to_highcharts(df)
+            #gold 
+            data = yf.download("GLD", start="2017-01-01", end="2021-11-01")
+            df = pd.DataFrame(data)
+            df = df[["Close"]]
+            df.columns = ["Gold"]
+            df = df.pct_change()
+            df = get_prices(df, "Gold")
+            gld_ret = "$" + str(round(df.iloc[-1]["Gold"]))
+            data_series += pandas_to_highcharts(df)
 
-        
+            
+            return render_template(
+                "research.html", ticker="Bitcoin", title=title, chartID=chartID, data=data_series, btc_ret = btc_ret, gld_ret = gld_ret
+            )
+            
 
         ################################## DOWNLOAD DATA ####################################################
         data = yf.download(ticker + "-USD", start="2017-01-01", end="2021-11-01")
@@ -199,11 +227,14 @@ def portfolio():
             except: #either not a crypto or dont have data for it
                 try:
                     df = get_stock_price(ticker)
+                    if df.empty:
+                        got_data = False
                     
                 except:
                     got_data = False
             if(not got_data):
                 print(ticker, "FAILED")
+                return render_template("portfolio.html", data=series, scatterplotlist = scatter, stats = stat_table, inval = "Invalid Ticker: " + ticker)
                 #RETURN ERROR MESSAGE HERE 
             else:
                 try:
@@ -240,7 +271,7 @@ def portfolio():
 
             #This is the series data 
             df = results._get_series(None).rebase()
-            print(df)
+            # print(df)
 
             # print(df)
             series += pandas_to_highcharts(df)
@@ -248,7 +279,7 @@ def portfolio():
             # print(df)
             
 
-            print(data)
+            # print(data)
             #Generate three different portfolios
 
             #conservative one = 3% into BTC 
