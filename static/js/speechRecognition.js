@@ -2,7 +2,6 @@ let microphones = []
 let _currentInput;
 
 if ("webkitSpeechRecognition" in window) {
-
   // define speech recognition
   let speechRecognition = new webkitSpeechRecognition();
   speechRecognition.continuous = true;
@@ -44,35 +43,46 @@ if ("webkitSpeechRecognition" in window) {
     return {start, end, isListening};
   };
 
+
   // add mic icons to text elements
   const inputParas = document.querySelectorAll('.listen');
   let microphone = Microphone();
 
   inputParas.forEach(para => {
     let inputElement = para.querySelector('input');
-    let micIcon = document.createElement('span');
+    let micIcon = document.createElement('button');
+
+    let ogplaceholder = "";
 
     micIcon.innerHTML = '<i class="bi bi-mic-fill"></i>';
     micIcon.style.cursor = 'pointer';
-    micIcon.style.opacity = '30%';
-    micIcon.style.userSelect = 'none';
-    micIcon.classList = ['mic'];
+    micIcon.style.marginLeft = '-3px';
+    micIcon.style.borderTopLeftRadius = "0px";
+    micIcon.style.borderBottomLeftRadius = "0px";
+    micIcon.classList.add('btn');
+    micIcon.classList.add('btn-danger');
+    micIcon.classList.add('mic');
 
-    micIcon.addEventListener('click', () => {
+    micIcon.addEventListener('click', function(event) {
+      event.preventDefault();
+      event.target.blur();
       if (microphone.isListening()) {
         // ending mic
-        micIcon.style.opacity = '30%';
+        micIcon.classList.remove("active");
+        inputElement.placeholder = ogplaceholder;
         microphone.end();
       } else {
         // starting mic
         _currentInput = inputElement;
+        ogplaceholder = inputElement.placeholder;
+        inputElement.placeholder = "Recording...";
         inputElement.value = "";
-        micIcon.style.opacity = '100%';
+        micIcon.classList.add("active");
         microphone.start();
       }
     });
 
     para.appendChild(micIcon);
   });
-  
 }
+  

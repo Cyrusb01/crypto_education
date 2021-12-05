@@ -13,6 +13,17 @@
             .navbar-light .navbar-nav .nav-link  {color: var(--font-color)}
             .navbar-light .navbar-nav .nav-link:hover {color: var(--color-accent);}
             .zv-navbar-bg {background-color: var(--color-background);}
+            .btn-danger:focus {
+                box-shadow: none;
+                background-color: #dc3545;
+            }
+            .btn-danger.active:focus {
+                box-shadow: none;
+                background-color: #b02a37;
+            }
+            .mic {
+                border-radius: 0px;
+            }
         </style>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 
@@ -53,18 +64,19 @@
             <!--Search Bar-->
             <form method = "POST"> 
                 <div class="input-group mb-3" style="width: 20%; margin: auto;">
-                    <input type="text" class="form-control" placeholder="Search for Crypto" aria-label="Enter Ticker" aria-describedby="button-addon2" name = "ticker">
+                    <div class="listen" style="display: flex;">
+                        <input type="text" class="form-control" placeholder="Search for Crypto" aria-label="Enter Ticker" aria-describedby="button-addon2" name = "ticker">
+                    </div>
                     <button class="btn btn-primary" type="submit" id="button-addon2"><i class="bi bi-search"></i></button>
                 </div>
             </form>
-                
-            
-
         </div>
+
         <div class="row justify-content-center" style="margin-bottom: 20px;">
             <!--Current Crypto Ticker Header-->
             <p class="zv-h1 text-center" id="header_cryptoTicker">{{ticker}}</p>
         </div>
+
         <div class="row justify-content-center" style="margin-bottom:50px;">
             <div class="col-4">
                 <p class="zv-h1">Is Bitcoin Digital Gold?</p>
