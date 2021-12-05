@@ -29,7 +29,7 @@
 
         <title>CryptoWorld</title>
     </head>
-    <body style="height:100%;  background: var(--color-background); ">
+    <body style="height:100%;  background: var(--color-background); " onload="setupPage();">
       
       <!-- Navbar -->
         <nav class="navbar navbar-expand navbar-light zv-nav zv-navbar-bg" style="padding-left:20px; padding-right:20px;">
@@ -76,62 +76,6 @@
       <div class="col col-md-8">
         <div class="accordion" id="accordionExample">
 
-          <div class="accordion-item">
-            <h2 class="accordion-header" id="headingOne">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                What is cryptocurrency?
-              </button>
-            </h2>
-            <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-              <div class="accordion-body speak">
-                Cryptocurrency is essentially decentralized digital money to be exchanged over the internet. Bitcoin was the first ever cryptocurrency and has been the most influential since. Cryptocurrency is attractive to people due to its lack of regulations imposed on by the government. Anyone and everyone can participate in cryptocurrency without the middleman.
-              </div>
-            </div>
-          </div>
-
-          <div class="accordion-item">
-            <h2 class="accordion-header" id="headingTwo">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                What is bitcoin?
-              </button>
-            </h2>
-            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-              <div class="accordion-body speak">
-                Bitcoin is the world's first widely-adopted cryptocurrency. It essentially is a digital money that allows for secure transactions
-              </div>
-            </div>
-          </div>
-
-          <div class="accordion-item">
-            <h2 class="accordion-header" id="headingThree">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                What is a blockchain?
-              </button>
-            </h2>
-            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-              <div class="accordion-body speak">
-                A blockchain is a distributed database that is shared among the nodes of a computer network. As a database, a blockchain stores information electronically in digital format. Blockchains are best known for their crucial role in cryptocurrency systems, such as bitcoin, for maintaining a secure and decentralized record of transactions. The innovation with a blockchain is that it guarantees the fidelity and security of a record of data and generates trust without the need for a trusted third party.
-              </div>
-            </div>
-          </div>
-
-          <div class="accordion-item">
-            <h2 class="accordion-header" id="headingFour">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                How does crypto mining work?
-              </button>
-            </h2>
-            <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-              <div class="accordion-body speak">
-                Crypto miners use special computer hardware to do the complex mathematical cryptography required to confirm each transaction on a blockchain. This process, called “proof of work” (PoW), requires miners to complete billions of calculations in order to verify a block of transactions. Proof of stake (PoS) is another consensus mechanism by which crypto is created, but PoW is common to many forms of crypto.
-                <br>
-                Crypto mining is highly competitive. The process relies on a network-wide consensus that essentially backs the validity of each transaction, even without a central authority. Once a miner has completed a certain number of calculations to verify a block of transactions on a given blockchain platform, they may be rewarded with new coins — if they are the first to verify the block.
-                <br>
-                Because proof-of-work crypto mining requires immense amounts of energy, there are concerns that the types of crypto that rely on PoW may be harmful to the environment.
-              </div>
-            </div>
-          </div>
-
         </div>
       </div>
     </div>
@@ -159,6 +103,49 @@
     <script src="../static/js/textToSpeech.js"></script>
     <script src="../static/js/speechRecognition.js"></script>
     <script>
+      function setupPage() {
+        
+        var questions = ["What is cryptocurrency?",
+                        "What is bitcoin?",
+                        "What is a blockchain?",
+                        "How does crypto mining work?",
+                        "Is it legal for me to purchase cryptocurrency in the U.S.?",
+                        "What is a crypto wallet?",
+                        "Is cryptocurrency taxable?",
+                        "What Is the Sortino Ratio?",
+                        "What Is a Maximum Drawdown (MDD)?"
+                        ];
+        var answers = ["Cryptocurrency is essentially decentralized digital money to be exchanged over the internet. Bitcoin was the first ever cryptocurrency and has been the most influential since. Cryptocurrency is attractive to people due to its lack of regulations imposed on by the government. Anyone and everyone can participate in cryptocurrency without the middleman.",
+                      "Bitcoin is the world's first widely-adopted cryptocurrency. It essentially is a digital money that allows for secure transactions",
+                      "A blockchain is a distributed database that is shared among the nodes of a computer network. As a database, a blockchain stores information electronically in digital format. Blockchains are best known for their crucial role in cryptocurrency systems, such as bitcoin, for maintaining a secure and decentralized record of transactions. The innovation with a blockchain is that it guarantees the fidelity and security of a record of data and generates trust without the need for a trusted third party.",
+                      "Crypto miners use special computer hardware to do the complex mathematical cryptography required to confirm each transaction on a blockchain. This process, called “proof of work” (PoW), requires miners to complete billions of calculations in order to verify a block of transactions. Proof of stake (PoS) is another consensus mechanism by which crypto is created, but PoW is common to many forms of crypto.<br>Crypto mining is highly competitive. The process relies on a network-wide consensus that essentially backs the validity of each transaction, even without a central authority. Once a miner has completed a certain number of calculations to verify a block of transactions on a given blockchain platform, they may be rewarded with new coins — if they are the first to verify the block.<br>Because proof-of-work crypto mining requires immense amounts of energy, there are concerns that the types of crypto that rely on PoW may be harmful to the environment.",
+                      "Yes. In 2013, the U.S. Treasury Department’s Financial Crimes Enforcement Network (FINCEN) stated that it is legal to invest in Bitcoin and use it as a form of payment as long as the seller is willing to accept it. The Securities and Exchange Commission has designated cryptocurrency as digital currency, the Commodity Future Trading Commission as commodities, and the IRS as property. You can purchase in any state, but certain states have imposed regulations. As an example, New York has a policy where any business must apply for a BitLicense if it is dealing with cryptocurrency. As adoption increases, look for regulatory and legal updates at the federal and state level.",
+                      "Simply put, crypto wallets are places to store digital assets more securely than just on an exchange.  You hold your wallet via an exchange account, custody wallet, or outside of the exchange. You can establish an online or “hot” wallet that is internet connected—to your desktop, table or mobile phone. There is also the option to store on a device that is not connected to the internet (“cold” wallet). Cold wallets are the most secure way to store your cryptocurrency, but they are meant for longer-term holdings as they are not connected to the internet. With cold storage, you must remember your private keys (identifier number for your cryptocurrency).",
+                      "For tax purposes, the IRS treats cryptocurrency like other personal assets such as stocks or gold. If you sell or exchange your investment, that transaction’s capital gains are taxable. The complexity of your transaction history will determine how much you’ll need to do to prepare for tax season if you have crypto. While there are new companies that promise to organize your crypto for tax filing, it’s ultimately your responsibility to keep track of your crypto transactions and report them to the IRS; so if you’re making frequent crypto moves, you’ll want to stay on top of this. ",
+                      "The Sortino ratio is a variation of the Sharpe ratio that differentiates harmful volatility from total overall volatility by using the asset's standard deviation of negative portfolio returns—downside deviation—instead of the total standard deviation of portfolio returns. The Sortino ratio takes an asset or portfolio's return and subtracts the risk-free rate, and then divides that amount by the asset's downside deviation. The ratio was named after Frank A. Sortino.",
+                      "A maximum drawdown (MDD) is the maximum observed loss from a peak to a trough of a portfolio, before a new peak is attained. Maximum drawdown is an indicator of downside risk over a specified time period."
+                      ];
+        var container = document.getElementById("accordionExample");
+
+        var i;
+        for ( i = 0; i < questions.length; i++ ) {
+          itemToCreate = "<div class='accordion-item'>" +
+              "<h2 class='accordion-header' id='heading"+i+"'>" +
+                "<button class='accordion-button collapsed' type='button' data-bs-toggle='collapse' data-bs-target='#collapse"+i+"' aria-expanded='false' aria-controls='collapse"+i+"'>" +
+                  questions[i] +
+                "</button>" +
+              "</h2>" +
+              "<div id='collapse"+i+"' class='accordion-collapse collapse' aria-labelledby='heading"+i+"' data-bs-parent='#accordionExample'>" +
+                "<div class='accordion-body speak'>" +
+                  answers[i] +
+                "</div>" +
+              "</div>" +
+            "</div>";
+
+            container.innerHTML += itemToCreate;
+        }
+      }
+      
 
       function updateQuestions() {
         var input = document.getElementById("searchQuestion");
@@ -192,7 +179,7 @@
 
     </script>
   </body>
-  <footer class="bg-light text-center text-lg-start" style="position: absolute; bottom: 0; width: 100%;">
+  <footer class="bg-light text-center text-lg-start">
     <!-- Copyright -->
     <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
       © 2021 Copyright:
