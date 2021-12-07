@@ -93,12 +93,12 @@ def research():
         sources = newsapi.get_sources()
         top_headlines = newsapi.get_everything(
             q=ticker,
-            sources='decrypt,bloomberg,forbes,the-block,coindesk,google-news',
+            # sources='decrypt,bloomberg,forbes,the-block,coindesk,google-news',
             #   category='business',
             language="en",
             #   country='us',
             from_param="2021-11-20",
-            to="2021-12-03",
+            to="2021-12-07",
             sort_by="relevancy",
             #   page = 1
         )
